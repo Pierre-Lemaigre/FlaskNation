@@ -1,0 +1,18 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    Appsy - 404
+{% endblock title %}
+
+{% block body %}
+
+    <div class="background">
+        <img src="{{ url_for('static', filename='img/404.png') }}" alt="404 Background">
+    </div>
+
+    <div class="col-md-6 col-md-offset-3 text-center messageDiv404 p-xs">
+        <h4>Oops ! Cette page n'existe pas :/</h4>
+        <p>Il semblerait qu'un problème soit survenu. Essayer de revenir quelques pas en arrière.</p>
+        <a href="{{ url_for('goToConnection') }}"><b>Faire un pas en arrière.</b></a>
+    </div>
+{% endblock body %}

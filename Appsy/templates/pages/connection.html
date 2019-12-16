@@ -1,0 +1,54 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    Appsy - Connexion
+{% endblock title %}
+
+{% block body %}
+
+    {% block navbar %}
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <div class="col-md-1">
+                    <img src="../../static/img/appsy_logo.png" alt="Logo appsy" height="100" width="100">
+                </div>
+            </a>
+        </nav>
+    {% endblock navbar %}
+
+    {% block content %}
+        <div class="col-md-6 col-md-offset-3 text-center">
+            <h1 class="display-4 py-2 text-truncate">Connexion</h1>
+            <hr class="col-md-6 col-md-offset-3">
+            <div class="container col-md-12">
+                <div>
+                    <h4>Heureux de vous revoir ! Connectez-vous pour accéder au service</h4>
+                    <h4>Vous avez peut-être <a href="#">oublié votre mot de passe ?</a></h4>
+                </div>
+                <form class="m-t-xl col-md-6 col-md-offset-3 justify-content-center" method="post"
+                      action="{{ url_for('goToHome') }}">
+                    <div class="form-group">
+                        <label class="sr-only"> Email ou nom d'utilisateur</label>
+                        <input name="user" type="text" class="form-control"
+                               placeholder="Email ou nom d'utilisateur">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="sr-only">Mot de passe</label>
+                        <input name="password" type="password" class="form-control" placeholder="Mot de passse">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <img class="d-block p-2"
+                             height="20"
+                             width="20"
+                             src="../../static/img/arrow-circle-right.svg"
+                             alt="Arrow circle right">
+                        Continuer
+                    </button>
+                </form>
+            </div>
+        </div>
+    {% endblock content %}
+
+{% endblock body %}
