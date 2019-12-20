@@ -1,5 +1,28 @@
 <nav>
-    <ul>
-        <li><a href="{{ url_for('goToHome') }}">Home</a></li>
-    </ul>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="#">
+                    <img src="../../static/img/appsy_logo.png" alt="Logo appsy" height="75" width="75">
+                </a>
+            </div>
+            <ul class="nav navbar-nav navbar-right well-sm">
+
+                <li><a href="{{ url_for('logout') }}">Bienvenue {{ user }} !</a></li>
+                <li><a href="{{ url_for('logout') }}">
+                    <img src="../../static/img/user.png" alt="Icon utilisateur"
+                         height="30" width="30">
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {%- for breadcrumb in breadcrumbs -%}
+                <li class="breadcrumb-item"><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+            {%- endfor -%}
+        </ol>
+    </div>
+
 </nav>

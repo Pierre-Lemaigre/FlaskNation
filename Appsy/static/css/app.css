@@ -1,3 +1,7 @@
+body {
+    font-family: Roboto, sans-serif;
+}
+
 /* Styling input*/
 
 input[type="text"], input[type="password"],
@@ -55,14 +59,54 @@ select.form-control:focus {
     border-radius: 10px;
 }
 
-.equals {
-    height: 450px;
+.well-sm {
+    display: flex;
+    align-items: center;
 }
 
-.well-sm {
-  display: flex;
-  align-items: center;
+.navbar {
+    margin-bottom: 2px;
 }
+
+.breadcrumb {
+    margin-bottom: 0px;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/*Past appointments patient*/
+
+.desc {
+    display: none;
+}
+
+
+.row-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.content {
+    height: 100%;
+    padding: 20px 20px 10px;
+    color: #fff;
+}
+
+.colour-1 {
+    background: #483C46;
+    color: #fff;
+}
+
+.colour-2 {
+    background: #3C6E71;
+}
+
+.colour-3 {
+    background: #70AE6E;
+}
+
 
 /* MARGINS & PADDINGS */
 .p-n {

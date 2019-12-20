@@ -1,114 +1,93 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}
-    Appsy
+    Appsy - Acceuil
 {% endblock title %}
 
 {% block body %}
     {% block navbar %}
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a href="#">
-                        <img src="../../static/img/appsy_logo.png" alt="Logo appsy" height="75" width="75">
-                    </a>
-                </div>
-                <ul class="nav navbar-nav navbar-right well-sm">
-
-                    <li><a href="../navbar-static-top/">Bienvenue {{ user }} !</a></li>
-                    <li><a href="../navbar-fixed-top/">
-                        <img src="../../static/img/user.png" alt="Icon utilisateur"
-                             height="30" width="30">
-                    </a></li>
-                </ul>
-            </div>
-        </nav>
+        {% include "layouts/shared/_nav.html" %}
     {% endblock navbar %}
 
     {% block content %}
-        <div class="col-md-12 text-center p-lg">
 
-            <div class="row">
+        <div class="container m-t-xl">
 
-                <div class="col-md-4 text-center m-n p-n ">
-                    <div class="col-md-10 col-md-offset-1 roundedborder equals">
-                        <div class="col-md-10 col-md-offset-1 text-center m-b-xl">
-                            <img class="m-t-lg" src="{{ url_for('static', filename='img/women.png') }}"
-                                 alt="Doctor photo"
-                                 height="150" width="150">
-                            <h3>Docteur Nom Prénom</h3>
-                            <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                nostrud
-                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                                dolor
-                                in
-                                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                        </div>
+            <div class="row row-flex">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="content colour-1 roundedborder text-center p-xl">
+                        <img src="{{ url_for('static', filename='img/women.png') }}"
+                             alt="Doctor photo"
+                             height="150" width="150">
+                        <h3>Docteur Nom Prénom</h3>
+                        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                            eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud
+                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                            dolor
+                            in
+                            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                     </div>
                 </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <a href="{{ url_for('go_to_past_appointments') }}">
+                        <div class="content colour-2 roundedborder p-xl">
+                            <h3 class="m-t-xs">Mes rendez-vous passés</h3>
 
-                <div class="col-md-4 text-center m-n p-n ">
-                    <div class="col-md-10 col-md-offset-1 roundedborder equals">
-                        <div class="col-md-10 col-md-offset-1 text-left p-n m-t-lg m-b-xl">
-                            <h3 class="m-t-xs">Mes</h3>
-                            <h3 class="m-t-xs">rendez-vous</h3>
-                            <h3 class="m-t-xs">passés</h3>
-
-                            <div class="col-md-12 text-left roundedborder m-t-lg">
+                            <div class="col-md-12 text-left roundedborder m-t-lg p-xs">
                                 <p>Rendez-vous du 12 / 12 / 2012</p>
                                 <p>A 14 : 45</p>
                                 <p>Avec Mme Nom Prénom</p>
                             </div>
 
-                            <div class="col-md-12 text-left roundedborder m-t-lg">
+                            <div class="col-md-12 text-left roundedborder m-t-lg p-xs">
                                 <p>Rendez-vous du 12 / 12 / 2012</p>
                                 <p>A 14 : 45</p>
                                 <p>Avec Mme Nom Prénom</p>
                             </div>
 
-                            <div class="col-md-12 text-center m-t-md">
-                                <img src="{{ url_for('static', filename='img/3points.svg') }}" alt="Show more points"
+                            <div class="col-md-12 text-center m-t-lg">
+
+                                <img src="{{ url_for('static', filename='img/3points_white.svg') }}"
+                                     alt="Show more points"
                                      height="15" width="60">
                             </div>
-
-
                         </div>
-                    </div>
+                    </a>
                 </div>
 
-                <div class="col-md-4 text-center m-n p-n ">
-                    <div class="col-md-10 col-md-offset-1 roundedborder equals">
-                        <div class="col-md-10 col-md-offset-1 text-left p-n m-t-lg m-b-xl">
-                            <h3 class="m-t-xs">Mes</h3>
-                            <h3 class="m-t-xs">rendez-vous</h3>
-                            <h3 class="m-t-xs">à venir</h3>
 
-                            <div class="col-md-12 text-left roundedborder m-t-lg">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <a href="{{ url_for('go_to_upcoming_appointments') }}">
+                        <div class="content colour-3 roundedborder p-xl">
+                            <h3 class="m-t-xs">Mes rendez-vous à venir</h3>
+
+                            <div class="col-md-12 text-left roundedborder m-t-lg p-xs">
                                 <p>Rendez-vous du 12 / 12 / 2012</p>
                                 <p>A 14 : 45</p>
                                 <p>Avec Mme Nom Prénom</p>
                             </div>
 
-                            <div class="col-md-12 text-left roundedborder m-t-lg">
+                            <div class="col-md-12 text-left roundedborder m-t-lg p-xs">
                                 <p>Rendez-vous du 12 / 12 / 2012</p>
                                 <p>A 14 : 45</p>
                                 <p>Avec Mme Nom Prénom</p>
                             </div>
 
-                            <div class="col-md-12 text-center m-t-md">
-                                <img src="{{ url_for('static', filename='img/3points.svg') }}" alt="Show more points"
+                            <div class="col-md-12 text-center m-t-lg">
+                                <img src="{{ url_for('static', filename='img/3points_white.svg') }}"
+                                     alt="Show more points"
                                      height="15" width="60">
                             </div>
-
-
                         </div>
-                    </div>
+                    </a>
                 </div>
 
             </div>
+
         </div>
+
     {% endblock content %}
 
 {% endblock body %}
