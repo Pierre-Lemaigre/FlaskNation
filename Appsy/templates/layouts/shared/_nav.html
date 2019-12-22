@@ -8,12 +8,18 @@
             </div>
             <ul class="nav navbar-nav navbar-right well-sm">
 
-                <li><a href="{{ url_for('logout') }}">Bienvenue {{ user }} !</a></li>
-                <li><a href="{{ url_for('logout') }}">
+                <li>Bienvenue {{ current_user.username }} !
+                    <a href="{{ url_for('logout') }}">
+                        <button ype="button" class="btn btn-primary">Deconnexion</button>
+                    </a>
+                </li>
+                <li>
                     <img src="../../static/img/user.png" alt="Icon utilisateur"
                          height="30" width="30">
-                </a></li>
+                </li>
+
             </ul>
+
         </div>
     </nav>
 
