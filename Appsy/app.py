@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, session, redirect, url_for, make_response
+from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_bootstrap import Bootstrap
 from datetime import datetime
 
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 
+import Connection
 from User import User
 
 app = Flask(__name__)
@@ -22,28 +23,6 @@ app.secret_key = "cPG38`t'\*-["  # any secret key
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# TODO
-users = [
-    dict(id=0, username="Arnaud", password="Test"),
-    dict(id=1, username="admin", password="admin")
-]
-
-
-def check_user(id):
-    for row in users:
-        if row['id'] == int(id):
-            return User(row["id"], row["username"], row["password"])
-
-    return None
-
-
-def is_password_valid(username, password):
-    for row in users:
-        if row["username"] == username and row["password"] == password:
-            return True
-
-    return False
-
 
 def custom_render_template(the_render_template):
     return after_request(make_response(the_render_template))
@@ -58,7 +37,7 @@ def after_request(response):
 
 @login_manager.user_loader
 def load_user(id):
-    return check_user(id)
+    return Connection.get_user_by_id(id)
 
 
 @app.context_processor
@@ -78,9 +57,9 @@ def go_to_connection():
         username = request.form['user']
         password = request.form['password']
 
-        # Todo
-        if is_password_valid(username, password):
-            login_user(User(0, username, password))
+        user = Connection.get_user(username, password)
+        if user is not None:
+            login_user(user)
             next = request.args.get('next')
             return redirect(next or url_for('go_to_home'))
         else:
