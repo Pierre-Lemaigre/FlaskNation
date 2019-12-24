@@ -112,6 +112,12 @@ a h3 {
 }
 
 
+/* Add patient  */
+
+.formHorizontalDivider{
+   height: 4em;
+}
+
 /* MARGINS & PADDINGS */
 .p-n {
     padding: 0px !important;

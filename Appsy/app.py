@@ -93,6 +93,45 @@ def go_to_upcoming_appointments():
     return custom_render_template(render_template('pages/upcoming_appointments_patient.html'))
 
 
+@app.route('/Ajouter patient', methods=['POST', 'GET'])
+@login_required
+@register_breadcrumb(app, '.Accueil.', 'Ajouter patient')
+def go_to_add_patient():
+    if request.method == 'POST':
+
+        # TODO
+        name = request.form['name']
+        type = request.form['type']
+        relationship = request.form['relationship']
+        forename = request.form['forename']
+        birthDate = request.form['birthDate']
+        knowing = request.form['knowing']
+        profession = request.form['profession']
+
+        return go_to_home()
+    else:
+        return custom_render_template(render_template('pages/add_patient.html'))
+
+
+@app.route('/Recherche patient', methods=['POST', 'GET'])
+@login_required
+@register_breadcrumb(app, '.Accueil.', 'Rechercher patient')
+def go_to_search_patient():
+    if request.method == 'POST':
+        # TODO
+        search = request.form['search']
+
+        list_patient = [
+            dict(id=0, type="Mr", forename="Antoine", name="Dupond", birthDate="30/09/1998"),
+            dict(id=1, type="Mme", forename="Eva", name="Dupond", birthDate="21/03/1997"),
+            dict(id=3, type="Enfant", forename="Tom", name="Dupond", birthDate="02/02/2019")
+        ]
+
+        return custom_render_template(render_template('pages/search_patient.html', list_patient=list_patient))
+    else:
+        return custom_render_template(render_template('pages/search_patient.html'))
+
+
 @app.route('/Deconnexion')
 @login_required
 def logout():

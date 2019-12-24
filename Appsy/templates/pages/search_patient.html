@@ -1,0 +1,47 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    Appsy - Acceuil
+{% endblock title %}
+
+{% block body %}
+    {% block navbar %}
+        {% include "layouts/shared/_nav.html" %}
+    {% endblock navbar %}
+
+    {% block content %}
+
+        <div class="container m-t-xl">
+            <h3>Recherche d'un patient</h3>
+            <div class="col-md-12 roundedborder m-t-md">
+
+                <div class="col-md-12 container m-t-md m-b-md">
+
+                    <form method="post" action="{{ url_for('go_to_search_patient') }}" class="search-container">
+                        <input type="text" class="col-md-9" placeholder="Rechercher ..." name="search">
+                        <button type="submit" class="btn btn-primary col-md-2 col-md-offset-1">Rechercher</button>
+                    </form>
+
+                    <div>
+
+                        {% if list_patient is defined %}
+                            {% for patient in list_patient %}
+                                <div class="roundedborder container">
+                                    {% if patient.type == "enfant" %}
+                                    {% else %}
+                                        <p>{{ patient.type }}</p>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    {% endblock content %}
+
+{% endblock body %}
