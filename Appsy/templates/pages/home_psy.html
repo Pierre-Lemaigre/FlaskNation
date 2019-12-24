@@ -1,9 +1,126 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}
-Appsy - Acceuil
+    Appsy - Acceuil
 {% endblock title %}
 
 {% block body %}
-    <h1>Re </h1>
+    {% block navbar %}
+        {% include "layouts/shared/_nav.html" %}
+    {% endblock navbar %}
+
+    {% block content %}
+
+        <div class="container m-t-xl">
+
+            <div class="row row-flex">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="content colour-1 roundedborder text-center">
+                        <div class="col-md-10 col-md-offset-1">
+                            <h2>Patient</h2>
+                            <hr>
+                        </div>
+
+                        <div class="col-md-10 col-md-offset-1 p-n">
+
+                            <a href="{{ url_for('go_to_past_appointments') }}">
+                                <div class="col-md-12 well-sm">
+                                    <img class="col-md-4" src="{{ url_for('static', filename='img/add_user.png') }}"
+                                         height="50" width="50">
+                                    <h3 class="col-md-8 text-right">Nouveau</h3>
+                                </div>
+                            </a>
+
+                            <a href="{{ url_for('go_to_past_appointments') }}">
+                                <div class="col-md-12 well-sm">
+                                    <img class="col-md-4"
+                                         src="{{ url_for('static', filename='img/magnifying_glass.png') }}"
+                                         height="50" width="50">
+                                    <h3 class="col-md-8 text-right">Recherche</h3>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                    <div class="content colour-2 roundedborder text-center">
+
+                        <div class="col-md-12 well-sm">
+
+                            <div class=" col-md-10 text-left">
+                                <h2 class="m-t-sm">Consultations</h2>
+                            </div>
+
+                            <div class="col-md-2">
+                                <a href="{{ url_for('go_to_past_appointments') }}">
+                                    <img src="{{ url_for('static', filename='img/download.png') }}"
+                                         height="25" width="25">
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 m-n">
+                            <hr class="m-n">
+                        </div>
+
+
+                        <div class="col-md-12 text-left">
+                            <h3>Prochaine :</h3>
+                            <div class="roundedborder">
+                                <h4 class="m-l">14h - 15h : Mme Prénom Truc</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 row-flex p-n m-t-md m-b-md">
+
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <a href="{{ url_for('go_to_past_appointments') }}">
+                                    <div class="content col-md-12 roundedborder">
+
+                                        <div class="col-md-12 text-left">
+                                            <h3 class="m-n">Mes consultations</h3>
+                                        </div>
+
+                                        <div class="col-md-3 col-md-offset-9 m-t-md">
+                                            <img class="m-n"
+                                                 src="{{ url_for('static', filename='img/psy.png') }}"
+                                                 height="50" width="40">
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <a href="{{ url_for('go_to_past_appointments') }}">
+                                    <div class="content col-md-12 roundedborder">
+
+                                        <div class="col-md-12 text-left">
+                                            <h3 class="m-n">Ajouter une consultation</h3>
+                                        </div>
+
+                                        <div class="col-md-3 col-md-offset-9">
+                                            <img class="m-n"
+                                                 src="{{ url_for('static', filename='img/add.png') }}"
+                                                 height="50" width="50">
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    {% endblock content %}
+
 {% endblock body %}

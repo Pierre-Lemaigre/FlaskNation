@@ -76,6 +76,10 @@ a:hover {
     text-decoration: none;
 }
 
+a h3 {
+    color: white;
+}
+
 /*Past appointments patient*/
 
 .desc {
@@ -90,7 +94,7 @@ a:hover {
 
 .content {
     height: 100%;
-    padding: 20px 20px 10px;
+    padding: 20px 20px 10px 20px;
     color: #fff;
 }
 
