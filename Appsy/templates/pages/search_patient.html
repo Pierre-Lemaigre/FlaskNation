@@ -17,21 +17,28 @@
 
                 <div class="col-md-12 container m-t-md m-b-md">
 
-                    <form method="post" action="{{ url_for('go_to_search_patient') }}" class="search-container">
+                    <div class="col-md-12">
+                        <h4>Recherchez un nom, un prénom ou une date de naissance</h4>
+                    </div>
+
+                    <form method="post" action="{{ url_for('go_to_search_patient') }}"
+                          class="search-container col-md-12 well-sm">
                         <input type="text" class="col-md-9" placeholder="Rechercher ..." name="search">
                         <button type="submit" class="btn btn-primary col-md-2 col-md-offset-1">Rechercher</button>
                     </form>
 
-                    <div>
+                    <div class="col-md-12">
 
                         {% if list_patient is defined %}
                             {% for patient in list_patient %}
-                                <div class="roundedborder container">
-                                    {% if patient.type == "enfant" %}
-                                    {% else %}
-                                        <p>{{ patient.type }}</p>
-                                    {% endif %}
-                                </div>
+                                <a href="{{ url_for('go_to_view_update_patient', id=patient.id) }}">
+                                    <div class="col-md-12 roundedborder container m-t-sm">
+                                        <h5>
+                                            {% if patient.type != "Enfant" %} {{ patient.type }} {% endif %}
+                                            {{ patient.name }} {{ patient.forename }}, né le {{ patient.birthDate }}
+                                        </h5>
+                                    </div>
+                                </a>
                             {% endfor %}
                         {% endif %}
 

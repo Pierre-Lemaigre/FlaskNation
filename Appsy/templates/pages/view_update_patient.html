@@ -1,0 +1,122 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    Appsy - Acceuil
+{% endblock title %}
+
+{% block body %}
+    {% block navbar %}
+        {% include "layouts/shared/_nav.html" %}
+    {% endblock navbar %}
+
+    {% block content %}
+
+        <div class="container m-t-xl">
+            <h3>Visualisation d'un patient</h3>
+            <div class="col-md-12 roundedborder m-t-md  text-left">
+                <form class="col-md-12 p-xl"
+                      action="{{ url_for('go_to_view_update_patient', id=patient.id) }}"
+                      method="post">
+                    <div class="row-flex row col-md-12">
+                        <div class="col-md-4">
+                            <label class="col-md-6">Nom :</label>
+                            <input class="col-md-6" type="text" name="name" placeholder="{{ patient.name }}" disabled>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="col-md-6">Type :</label>
+                            <select class="col-md-6" name="type">
+                                <option {% if patient.type == "Mme" %}selected{% endif %}>Femme</option>
+                                <option {% if patient.type == "Mr" %}selected{% endif %}>Homme</option>
+                                <option {% if patient.type == "Ado" %}selected{% endif %}>Ado</option>
+                                <option {% if patient.type == "Enfant" %}selected{% endif %}>Enfant</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="col-md-6">En couple :</label>
+                            <select class="col-md-6" name="relationship">
+                                <option {% if patient.relationship == -1 %}selected{% endif %}>Celibataire</option>
+                                <option {% if patient.relationship == 0 %}selected{% endif %}>Mme Antoine Dupond
+                                </option>
+                                <option {% if patient.relationship == 1 %}selected{% endif %}>Mme Eva Dupond
+                                </option>
+                                <option {% if patient.relationship ==  2 %}selected{% endif %}>...</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="formHorizontalDivider"></div>
+
+                    <div class="row-flex row col-md-12">
+
+                        <div class="col-md-4">
+                            <label class="col-md-6">Prénom :</label>
+                            <input class="col-md-6" type="text" name="forename" placeholder="{{ patient.forename }}"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="col-md-6">Date naissance :</label>
+                            <input class="col-md-6" type="date" name="birthDate"
+                                   value="{{ patient.birthDate }}"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="col-md-6">Connaissance :</label>
+                            <select class="col-md-6" name="knowing" disabled>
+                                <option {% if patient.knowing == 0 %}selected{% endif %}>Internet</option>
+                                <option {% if patient.knowing == 1 %}selected{% endif %}>Pub</option>
+                                <option {% if patient.knowing == 2 %}selected{% endif %}>Bouche à oreilles</option>
+                                <option {% if patient.knowing == 3 %}selected{% endif %}>Autre</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="formHorizontalDivider"></div>
+
+                    <div class="row-flex row col-md-12">
+
+                        <div class="col-md-4">
+                            <label class="col-md-6">Professions :</label>
+                            <select class="col-md-6" name="profession">
+                                <option {% if patient.profession == 0 %}selected{% endif %}>Plombier</option>
+                                <option {% if patient.profession == 1 %}selected{% endif %}>Electricien</option>
+                                <option {% if patient.profession == 2 %}selected{% endif %}>+ Nouveau +</option>
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <img class="m-n"
+                                 src="{{ url_for('static', filename='img/minus_black.png') }}"
+                                 height="20" width="20">
+
+                            <img class="m-n"
+                                 src="{{ url_for('static', filename='img/add_black.png') }}"
+                                 height="20" width="20">
+                        </div>
+
+                        <div class="col-md-2 p-xxs">
+                            <form class="col-md-12 p-n" action="{{ url_for('go_to_delete_patient',id=patient.id) }}"
+                                  method="post">
+                                <input value="{{ patient.id }}" type="hidden" name="id">
+                                <button type="submit" class="btn btn-danger col-md-12">Supprimer</button>
+                            </form>
+                        </div>
+
+                        <div class="col-md-2 p-xxs">
+                            <button type="submit" class="btn btn-primary col-md-12">Valider</button>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    {% endblock content %}
+
+{% endblock body %}
