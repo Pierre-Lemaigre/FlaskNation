@@ -1,0 +1,118 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    Appsy - Acceuil
+{% endblock title %}
+
+{% block body %}
+    {% block navbar %}
+        {% include "layouts/shared/_nav.html" %}
+    {% endblock navbar %}
+
+    {% block content %}
+
+        <div class="container m-t-xl">
+            <h3>Ajouter une consultation</h3>
+            <div class="col-md-12 roundedborder m-t-md text-left p-md">
+
+                <div class="col-md-12 well-sm">
+                    <form class="col-md-12" action="{{ url_for('go_to_add_consultation') }}" method="post">
+
+                        <div class="col-md-3 well-sm">
+                            <label>Date : </label>
+                            <input type="date" name="wanted_date" class="m-l"
+                                    {% if data is defined and data.wanted_date is defined %}
+                                   value="{{ data.wanted_date }}" {% endif %} required>
+                        </div>
+
+                        <div class="col-md-3 well-sm">
+                            <label>Type consultation : </label>
+                            <select name="consultation_type" class="m-l">
+                                <option {% if data is defined and data.consultation_type == 0 %} selected {% endif %}
+                                                                                                 value="0">Seul
+                                </option>
+                                <option {% if data is defined and data.consultation_type == 1 %} selected {% endif %}
+                                                                                                 value="1">Couple
+                                </option>
+                                <option {% if data is defined and data.consultation_type == 2 %} selected {% endif %}
+                                                                                                 value="2">Groupe
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 col-md-offset-4">
+                            <button type="submit" class="btn btn-primary">Voir les disponibilité</button>
+                        </div>
+
+                        <div class="col-md-12 well-sm">
+
+                            <label>Participant : </label>
+                            <select name="participants" class="m-l">
+
+                                {% if list_patient is defined %}
+
+                                    {% for patient in list_patient %}
+
+                                        <option value="{{ patient.id }}"
+                                                {% if data is defined and data.participants == patient.id %}
+                                                selected {% endif %}>
+                                            {% if patient.type != "Enfant" %}
+                                                {{ patient.type }} {% endif %}
+                                            {{ patient.name }} {{ patient.forename }}
+                                        </option>
+
+                                    {% endfor %}
+                                {% endif %}
+
+                            </select>
+
+                            <div class="m-l-md">
+                                <img class="m-n"
+                                     src="{{ url_for('static', filename='img/minus_black.png') }}"
+                                     height="20" width="20">
+
+                                <img class="m-n"
+                                     src="{{ url_for('static', filename='img/add_black.png') }}"
+                                     height="20" width="20">
+                            </div>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+                {% if data is defined and data.wanted_date is defined %}
+                    <div class="col-md-12">
+
+                        <h5>Choissir un crénaux pour cette consultation :</h5>
+
+                        {% for slot in day_slots %}
+
+                            <form id="form" method="post" action="{{ url_for('add_consultation') }}">
+                                <input name="date" type="hidden" value="{{ wanted_date }}">
+                                <input name="id_time_slot" type="hidden" value="{{ slot.id }}">
+                                <a href="{{ url_for('add_consultation') }}"
+                                   onclick="document.getElementById('myform').submit()">
+                                    <div class="col-md-12 roundedborder container m-t-sm">
+                                        <h4>
+                                            {{ slot.label }}
+                                        </h4>
+                                    </div>
+                                </a>
+                            </form>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+    {% endblock content %}
+
+{% endblock body %}
+

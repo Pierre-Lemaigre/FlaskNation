@@ -34,15 +34,26 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="col-md-6">En couple :</label>
+                            <label class="col-md-6">Relation :</label>
                             <select class="col-md-6" name="relationship">
-                                <option {% if patient.relationship == -1 %}selected{% endif %}>Celibataire</option>
-                                <option {% if patient.relationship == 0 %}selected{% endif %}>Mme Antoine Dupond
+                                <option value="-2" {% if patient.relationship == -2 %}selected{% endif %}>Celibataire
                                 </option>
-                                <option {% if patient.relationship == 1 %}selected{% endif %}>Mme Eva Dupond
+                                <option value="-1" {% if patient.relationship == -2 %}selected{% endif %}>Non patient
                                 </option>
-                                <option {% if patient.relationship ==  2 %}selected{% endif %}>...</option>
+
+                                {% if list_patient is defined %}
+                                    {% for relationship in list_patient %}
+                                        <option value="{{ patient.id }}"
+                                                {% if patient.relationship == relationship.id %}selected{% endif %}>
+                                            {% if relationship.type != "Enfant" %} {{ relationship.type }} {% endif %}
+                                            {{ relationship.name }} {{ relationship.forename }}
+                                        </option>
+                                    {% endfor %}
+                                {% endif %}
+
                             </select>
+
+
                         </div>
 
                     </div>
@@ -67,10 +78,15 @@
                         <div class="col-md-4">
                             <label class="col-md-6">Connaissance :</label>
                             <select class="col-md-6" name="knowing" disabled>
-                                <option {% if patient.knowing == 0 %}selected{% endif %}>Internet</option>
-                                <option {% if patient.knowing == 1 %}selected{% endif %}>Pub</option>
-                                <option {% if patient.knowing == 2 %}selected{% endif %}>Bouche à oreilles</option>
-                                <option {% if patient.knowing == 3 %}selected{% endif %}>Autre</option>
+                                <option value="0" {% if patient.knowing == 0 %}selected{% endif %}>Autre patient
+                                </option>
+                                <option value="1" {% if patient.knowing == 0 %}selected{% endif %}>Docteur</option>
+                                <option value="2" {% if patient.knowing == 0 %}selected{% endif %}>Bouche à oreilles
+                                </option>
+                                <option value="3" {% if patient.knowing == 0 %}selected{% endif %}>Pages Jaunes</option>
+                                <option value="4" {% if patient.knowing == 0 %}selected{% endif %}>Internet</option>
+                                <option value="5" {% if patient.knowing == 0 %}selected{% endif %}>Autre</option>
+
                             </select>
                         </div>
                     </div>
@@ -80,11 +96,19 @@
                     <div class="row-flex row col-md-12">
 
                         <div class="col-md-4">
+
                             <label class="col-md-6">Professions :</label>
                             <select class="col-md-6" name="profession">
-                                <option {% if patient.profession == 0 %}selected{% endif %}>Plombier</option>
-                                <option {% if patient.profession == 1 %}selected{% endif %}>Electricien</option>
-                                <option {% if patient.profession == 2 %}selected{% endif %}>+ Nouveau +</option>
+                                <option value="-1">+ Nouveau +</option>
+
+                                {% if list_profession is defined %}
+                                    {% for profession in list_profession %}
+                                        <option value="{{ profession.id }}"
+                                                {% if patient.profession == profession.id %}selected{% endif %}>
+                                            {{ profession.label }}
+                                        </option>
+                                    {% endfor %}
+                                {% endif %}
                             </select>
 
                         </div>
@@ -100,7 +124,7 @@
                         </div>
 
                         <div class="col-md-2 p-xxs">
-                            <form class="col-md-12 p-n" action="{{ url_for('go_to_delete_patient',id=patient.id) }}"
+                            <form class="col-md-12 p-n" action="{{ url_for('delete_patient',id=patient.id) }}"
                                   method="post">
                                 <input value="{{ patient.id }}" type="hidden" name="id">
                                 <button type="submit" class="btn btn-danger col-md-12">Supprimer</button>

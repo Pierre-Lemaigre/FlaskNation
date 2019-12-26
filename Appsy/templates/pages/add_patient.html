@@ -24,19 +24,28 @@
                         <div class="col-md-4">
                             <label class="col-md-6">Type :</label>
                             <select class="col-md-6" name="type">
-                                <option>Femme</option>
-                                <option>Homme</option>
-                                <option>Ado</option>
-                                <option>Enfant</option>
+                                <option value="0">Femme</option>
+                                <option value="1">Homme</option>
+                                <option value="2">Ado</option>
+                                <option value="3">Enfant</option>
                             </select>
                         </div>
 
                         <div class="col-md-4">
-                            <label class="col-md-6">En couple :</label>
+                            <label class="col-md-6">Relation :</label>
                             <select class="col-md-6" name="relationship">
-                                <option>Celibataire</option>
-                                <option>Mme Truc Machine</option>
-                                <option>...</option>
+                                <option value="-2">Celibataire</option>
+                                <option value="-1">Non patient</option>
+
+                                {% if list_patient is defined %}
+                                    {% for relationship in list_patient %}
+                                        <option value="{{ relationship.id }}">
+                                            {% if relationship.type != "Enfant" %} {{ relationship.type }} {% endif %}
+                                            {{ relationship.name }} {{ relationship.forename }}
+                                        </option>
+                                    {% endfor %}
+                                {% endif %}
+
                             </select>
                         </div>
 
@@ -59,10 +68,12 @@
                         <div class="col-md-4">
                             <label class="col-md-6">Connaissance :</label>
                             <select class="col-md-6" name="knowing">
-                                <option>Internet</option>
-                                <option>Pub</option>
-                                <option>Bouche à oreilles</option>
-                                <option>Autre</option>
+                                <option value="0">Autre patient</option>
+                                <option value="1">Docteur</option>
+                                <option value="2">Bouche à oreilles</option>
+                                <option value="3">Pages Jaunes</option>
+                                <option value="4">Internet</option>
+                                <option value="5">Autre</option>
                             </select>
                         </div>
                     </div>
@@ -74,9 +85,14 @@
                         <div class="col-md-4">
                             <label class="col-md-6">Professions :</label>
                             <select class="col-md-6" name="profession">
-                                <option>Plombier</option>
-                                <option>Electricien</option>
-                                <option>+ Nouveau +</option>
+                                <option value="-1">+ Nouveau +</option>
+
+                                {% if list_profession is defined %}
+                                    {% for profession in list_profession %}
+                                        <option value="{{ profession.id }}">{{ profession.label }}</option>
+                                    {% endfor %}
+                                {% endif %}
+
                             </select>
 
                         </div>

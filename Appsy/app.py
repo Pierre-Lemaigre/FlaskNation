@@ -28,8 +28,23 @@ list_patient = [
          profession=0),
     dict(id=1, type="Mme", forename="Eva", name="Dupond", birthDate="1997-03-21", knowing=1, relationship=0,
          profession=1),
-    dict(id=3, type="Enfant", forename="Tom", name="Dupond", birthDate="2019-02-02", knowing=1, relationship=-1,
+    dict(id=2, type="Enfant", forename="Tom", name="Dupond", birthDate="2019-02-02", knowing=1, relationship=-1,
          profession=2)
+]
+
+list_profession = [
+    dict(id=0, label="Boucher"),
+    dict(id=1, label="Electricien"),
+    dict(id=2, label="Etudiant")
+]
+
+day_slots = [
+    dict(id=0, label="8h00 - 8h30"),
+    dict(id=1, label="8h30 - 9h00"),
+    dict(id=4, label="9h30 - 10h00"),
+    dict(id=9, label="14h00 - 14h30"),
+    dict(id=10, label="14h30 - 15h00"),
+    dict(id=18, label="19h30 - 20h00"),
 ]
 
 
@@ -125,7 +140,8 @@ def go_to_add_patient():
 
         return redirect(url_for('go_to_home'))
     else:
-        return custom_render_template(render_template('pages/add_patient.html'))
+        return custom_render_template(
+            render_template('pages/add_patient.html', list_profession=list_profession, list_patient=list_patient))
 
 
 @app.route('/Recherche patient', methods=['POST', 'GET'])
@@ -155,13 +171,44 @@ def go_to_view_update_patient(id):
 
         return redirect(url_for('go_to_home'))
     else:
-        return render_template('pages/view_update_patient.html', patient=find_patient(id))
+        return render_template('pages/view_update_patient.html',
+                               patient=find_patient(id), list_patient=list_patient, list_profession=list_profession)
 
 
 @app.route('/Supprimer patient/<int:id>', methods=['POST'])
 @login_required
-def go_to_delete_patient(id):
+def delete_patient(id):
     # TODO Delete id
+    return redirect(url_for('go_to_home'))
+
+
+@app.route('/Ajout consultation', methods=['POST', 'GET'])
+@login_required
+@register_breadcrumb(app, '.Accueil.', 'Ajout consultation')
+def go_to_add_consultation():
+    if request.method == 'POST':
+
+        # TODO Get day_slots
+        wanted_date = request.form['wanted_date']
+        consultation_type = int(request.form['consultation_type'])
+        participants = int(request.form['participants'])
+
+        data = dict(wanted_date=wanted_date, consultation_type=consultation_type, participants=participants)
+
+        return custom_render_template(
+            render_template('pages/add_consultation.html', data=data, day_slots=day_slots, list_patient=list_patient))
+    else:
+        return custom_render_template(render_template('pages/add_consultation.html', list_patient=list_patient))
+
+
+@app.route('/add_consultation', methods=['POST', 'GET'])
+@login_required
+def add_consultation():
+    if request.method == 'POST':
+        # TODO Add consultation
+        date = request.form['date']
+        id_time_slot = request.form['id_time_slot']
+
     return redirect(url_for('go_to_home'))
 
 
