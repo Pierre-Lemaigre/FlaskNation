@@ -220,7 +220,7 @@ def delete_patient(id):
 
 @app.route('/Ajout consultation', methods=['POST', 'GET'])
 @login_required
-@register_breadcrumb(app, '.Accueil.', 'Ajout consultation')
+@register_breadcrumb(app, '.Accueil', 'Ajout consultation')
 def go_to_add_consultation():
     if request.method == 'POST':
 
@@ -250,7 +250,7 @@ def add_consultation():
 
 @app.route('/Mes consultations/<int:sort>/<int:nav>', methods=['POST', 'GET'])
 @login_required
-@register_breadcrumb(app, '.Accueil.', 'Mes consultations')
+@register_breadcrumb(app, '.Accueil.a', 'Mes consultations')
 def go_to_view_consultations(sort, nav):
     # TODO Get consultation
     if request.method == 'POST':
