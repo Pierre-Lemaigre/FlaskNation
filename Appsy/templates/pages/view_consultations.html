@@ -18,7 +18,11 @@
                 {% elif nav > 0 %}
                     <h3>Consultations à venir</h3>
                 {% else %}
-                    <h3>Consultations du jour</h3>
+                    {% if sort == 0 %}
+                        <h3>Consultations du jour</h3>
+                    {% else %}
+                        <h3>Consultations de la semaine</h3>
+                    {% endif %}
                 {% endif %}
             {% else %}
                 <h3>Consultations</h3>
@@ -48,10 +52,18 @@
                             <= Jour précédent</a>
                         <div class="col-md-8">
                             <div class="col-md-8 col-md-offset-2">
-                                {% if nav == 0 %}
-                                    <h3 class="text-center">Aujourd'hui</h3>
-                                {% else %}
-                                    <h3 class="text-center">{{ format_date(date) }}</h3>
+                                {% if sort == 0 %}
+                                    {% if nav == 0 %}
+                                        <h3 class="text-center">Aujourd'hui</h3>
+                                    {% else %}
+                                        <h3 class="text-center">{{ format_date(date) }}</h3>
+                                    {% endif %}
+                                {% elif sort == 1 %}
+                                    {% if nav == 0 %}
+                                        <h3 class="text-center">Cette semaine</h3>
+                                    {% else %}
+                                        <h3 class="text-center">Semaine - {{ date }}</h3>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                             <div class="col-md-8 col-md-offset-2 m-t-n">
@@ -193,8 +205,14 @@
                         {% if list_consultations_week is defined and sort == 1 %}
                             {% for day_of_week in list_consultations_week %}
                                 <div>
-                                    <h3 class="text-left">{{ format_date(day_of_week.date) }}</h3>
-                                    <hr class="m-n">
+                                    {% if today() == day_of_week.date %}
+                                        <h3 class="text-left text-primary">Aujourd'hui</h3>
+                                        <hr class="m-n btn-primary">
+                                    {% else %}
+                                        <h3 class="text-left">{{ format_date(day_of_week.date) }}</h3>
+                                        <hr class="m-n">
+                                    {% endif %}
+
                                 </div>
                                 {% for consultation in day_of_week.list_consultations_day %}
                                     <div class="col-md-12 roundedborder p-n m-t-md">

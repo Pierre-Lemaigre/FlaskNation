@@ -55,19 +55,19 @@ day_slots = [
 ]
 
 list_consultations_day = [
-    dict(id=0, date="2020-01-01", hour="14h30", anxity=2, type=0, payment="Carte", pice=45, participant=0),
-    dict(id=1, date="2020-02-02", hour="10h00", anxity=5, type=1, payment="Chèque", pice=30, participant=1),
-    dict(id=2, date="2020-03-03", hour="16h30", anxity=8, type=2, payment="Cash", pice=45, participant=2),
-    dict(id=3, date="2020-04-04", hour="19h30", anxity=10, type=0, payment="Carte", pice=45, participant=0),
+    dict(id=0, date="2019-12-27", hour="14h30", anxity=2, type=0, payment="Carte", pice=45, participant=0),
+    dict(id=1, date="2019-12-27", hour="10h00", anxity=5, type=1, payment="Chèque", pice=30, participant=1),
+    dict(id=2, date="2019-12-27", hour="16h30", anxity=8, type=2, payment="Cash", pice=45, participant=2),
+    dict(id=3, date="2019-12-27", hour="19h30", anxity=10, type=0, payment="Carte", pice=45, participant=0),
 ]
 
 list_consultations_week = [
-    dict(day=0, date="2020-01-01", list_consultations_day=list_consultations_day),
-    dict(day=1, date="2020-01-02", list_consultations_day=list_consultations_day),
-    dict(day=2, date="2020-01-03", list_consultations_day=list_consultations_day),
-    dict(day=3, date="2020-01-04", list_consultations_day=list_consultations_day),
-    dict(day=4, date="2020-01-05", list_consultations_day=list_consultations_day),
-    dict(day=5, date="2020-01-06", list_consultations_day=list_consultations_day),
+    dict(day=0, date="2019-12-23", list_consultations_day=list_consultations_day),
+    dict(day=1, date="2019-12-24", list_consultations_day=list_consultations_day),
+    dict(day=2, date="2019-12-25", list_consultations_day=list_consultations_day),
+    dict(day=3, date="2019-12-26", list_consultations_day=list_consultations_day),
+    dict(day=4, date="2019-12-27", list_consultations_day=list_consultations_day),
+    dict(day=5, date="2019-12-28", list_consultations_day=list_consultations_day),
 ]
 
 list_consultations_patient = [
@@ -114,6 +114,14 @@ def utility_processor():
         return date_to_format.strftime("%A %d %B %Y")
 
     return dict(format_date=format_date)
+
+
+@app.context_processor
+def utility_processor():
+    def get_today_date():
+        return str(calendar_manager.get_today())
+
+    return dict(today=get_today_date)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -261,21 +269,28 @@ def go_to_view_consultations(sort, nav):
             render_template('pages/view_consultations.html', list_consultations_patient=list_consultations_patient,
                             list_patient=list_patient, id_patient=id_patient, sort=sort))
     else:
-        if nav == 0:
-            date = calendar_manager.get_today()
-        elif nav == 1:
-            date = calendar_manager.get_day_before()
-        else:
-            date = calendar_manager.get_next_day()
-
         if sort == 0:
+            if nav == 0:
+                date = calendar_manager.get_today()
+            elif nav == 1:
+                date = calendar_manager.get_day_before()
+            else:
+                date = calendar_manager.get_next_day()
+
             return custom_render_template(
                 render_template('pages/view_consultations.html', list_consultations_day=list_consultations_day,
                                 sort=sort, date=date, nav=calendar_manager.get_day_offset()))
         elif sort == 1:
+            if nav == 0:
+                date = calendar_manager.get_week()
+            elif nav == 1:
+                date = calendar_manager.get_week_before()
+            else:
+                date = calendar_manager.get_next_week()
+
             return custom_render_template(
                 render_template('pages/view_consultations.html', list_consultations_week=list_consultations_week,
-                                sort=sort, date=date, nav=calendar_manager.get_day_offset()))
+                                sort=sort, date=date, nav=calendar_manager.get_week_offset()))
         else:
             return custom_render_template(
                 render_template('pages/view_consultations.html', list_patient=list_patient, sort=sort))
