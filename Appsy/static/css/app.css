@@ -118,6 +118,21 @@ a h3 {
    height: 4em;
 }
 
+/* View consultations */
+
+label a{
+    color: white;
+}
+
+label a:hover{
+    font-size: 110%;
+    color: white;
+}
+
+
+
+
+
 /* MARGINS & PADDINGS */
 .p-n {
     padding: 0px !important;

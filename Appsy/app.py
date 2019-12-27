@@ -1,12 +1,13 @@
+import locale
+
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_bootstrap import Bootstrap
-from datetime import datetime
 
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 
+from CalendarManager import *
 import Connection
-from User import User
 
 app = Flask(__name__)
 
@@ -22,6 +23,12 @@ app.secret_key = "cPG38`t'\*-["  # any secret key
 # For login
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+# For calendar
+calendar_manager = CalendarManager()
+locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
+
+# Virtual BD
 
 list_patient = [
     dict(id=0, type="Mr", forename="Antoine", name="Dupond", birthDate="1998-09-30", knowing=0, relationship=1,
@@ -47,6 +54,29 @@ day_slots = [
     dict(id=18, label="19h30 - 20h00"),
 ]
 
+list_consultations_day = [
+    dict(id=0, date="2020-01-01", hour="14h30", anxity=2, type=0, payment="Carte", pice=45, participant=0),
+    dict(id=1, date="2020-02-02", hour="10h00", anxity=5, type=1, payment="Chèque", pice=30, participant=1),
+    dict(id=2, date="2020-03-03", hour="16h30", anxity=8, type=2, payment="Cash", pice=45, participant=2),
+    dict(id=3, date="2020-04-04", hour="19h30", anxity=10, type=0, payment="Carte", pice=45, participant=0),
+]
+
+list_consultations_week = [
+    dict(day=0, date="2020-01-01", list_consultations_day=list_consultations_day),
+    dict(day=1, date="2020-01-02", list_consultations_day=list_consultations_day),
+    dict(day=2, date="2020-01-03", list_consultations_day=list_consultations_day),
+    dict(day=3, date="2020-01-04", list_consultations_day=list_consultations_day),
+    dict(day=4, date="2020-01-05", list_consultations_day=list_consultations_day),
+    dict(day=5, date="2020-01-06", list_consultations_day=list_consultations_day),
+]
+
+list_consultations_patient = [
+    dict(id=0, date="2020-01-01", hour="14h30", anxity=2, type=0, payment="Carte", pice=45, participant=1),
+    dict(id=1, date="2020-02-02", hour="10h00", anxity=5, type=1, payment="Chèque", pice=30, participant=1),
+    dict(id=2, date="2020-03-03", hour="16h30", anxity=8, type=2, payment="Cash", pice=45, participant=1),
+    dict(id=3, date="2020-04-04", hour="19h30", anxity=10, type=0, payment="Carte", pice=45, participant=0),
+]
+
 
 def find_patient(id):
     for row in list_patient:
@@ -70,14 +100,20 @@ def load_user(id):
     return Connection.get_user_by_id(id)
 
 
-@app.context_processor
-def inject_now():
-    return dict(now=datetime.now())
-
-
 @app.errorhandler(404)
 def page_not_found(error):
     return custom_render_template(render_template('errors/404.html')), 404
+
+
+@app.context_processor
+def utility_processor():
+    def format_date(date_to_format):
+        if not isinstance(date_to_format, date):
+            date_to_format = date.fromisoformat(date_to_format)
+
+        return date_to_format.strftime("%A %d %B %Y")
+
+    return dict(format_date=format_date)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -210,6 +246,39 @@ def add_consultation():
         id_time_slot = request.form['id_time_slot']
 
     return redirect(url_for('go_to_home'))
+
+
+@app.route('/Mes consultations/<int:sort>/<int:nav>', methods=['POST', 'GET'])
+@login_required
+@register_breadcrumb(app, '.Accueil.', 'Mes consultations')
+def go_to_view_consultations(sort, nav):
+    # TODO Get consultation
+    if request.method == 'POST':
+
+        id_patient = int(request.form['id_patient'])
+
+        return custom_render_template(
+            render_template('pages/view_consultations.html', list_consultations_patient=list_consultations_patient,
+                            list_patient=list_patient, id_patient=id_patient, sort=sort))
+    else:
+        if nav == 0:
+            date = calendar_manager.get_today()
+        elif nav == 1:
+            date = calendar_manager.get_day_before()
+        else:
+            date = calendar_manager.get_next_day()
+
+        if sort == 0:
+            return custom_render_template(
+                render_template('pages/view_consultations.html', list_consultations_day=list_consultations_day,
+                                sort=sort, date=date, nav=calendar_manager.get_day_offset()))
+        elif sort == 1:
+            return custom_render_template(
+                render_template('pages/view_consultations.html', list_consultations_week=list_consultations_week,
+                                sort=sort, date=date, nav=calendar_manager.get_day_offset()))
+        else:
+            return custom_render_template(
+                render_template('pages/view_consultations.html', list_patient=list_patient, sort=sort))
 
 
 @app.route('/Deconnexion')
