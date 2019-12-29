@@ -53,7 +53,7 @@
                             </div>
 
                             <div class="col-md-2">
-                                <a href="{{ url_for('go_to_past_appointments') }}">
+                                <a href="{{ url_for('coming_soon') }}">
                                     <img src="{{ url_for('static', filename='img/download.png') }}"
                                          height="25" width="25">
                                 </a>
@@ -68,9 +68,21 @@
 
                         <div class="col-md-12 text-left">
                             <h3>Prochaine :</h3>
-                            <div class="roundedborder">
-                                <h4 class="m-l">14h - 15h : Mme Prénom Truc</h4>
-                            </div>
+                            <a onclick="document.getElementById('myform').submit()">
+                                <form id="myform" action="{{ url_for('go_to_consulter',id=next_consultation.id) }}"
+                                      method="post">
+                                    <div class="roundedborder">
+                                        <input type="hidden" name="id_consultation" value="{{ next_consultation.id }}">
+                                        <h4 class="h4_home m-l">
+                                            {{ next_consultation.hour }} -
+                                            {% if next_consultation.type != "Enfant" %}
+                                                {{ next_consultation.type }}
+                                            {% endif %}
+                                            {{ next_consultation.forename }} {{ next_consultation.name }}
+                                        </h4>
+                                    </div>
+                                </form>
+                            </a>
                         </div>
 
                         <div class="col-md-12 row-flex p-n m-t-md m-b-md">

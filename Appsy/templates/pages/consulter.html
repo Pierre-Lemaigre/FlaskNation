@@ -1,0 +1,136 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    Appsy - Acceuil
+{% endblock title %}
+
+{% block body %}
+    {% block navbar %}
+        {% include "layouts/shared/_nav.html" %}
+    {% endblock navbar %}
+
+    {% block content %}
+
+        <div class="container m-t-xl">
+            <h3>Consulter</h3>
+
+            <div class="col-md-12 roundedborder m-t-xs text-left p-md">
+
+                <div class="col-md-12 well-sm">
+                    <form class="col-md-12" action="{{ url_for('go_to_consulter',id=next_consultation.id) }}"
+                          method="post">
+
+                        <div class="col-md-12">
+
+                            <div class="row">
+
+                                {# Appointment date #}
+                                <div class="col-md-3">
+                                    <div class="col-md-4 col-md-offset-1 p-n">
+                                        <p>Date :</p>
+                                    </div>
+                                    <div class="col-md-6 p-n">
+                                        <p>{{ next_consultation.date }}</p>
+                                    </div>
+                                </div>
+
+                                {# Anxiety level #}
+                                <div class="col-md-3">
+                                    <div class="col-md-7 col-md-offset-1 p-n">
+                                        <p>Indicateur d'anxiété :</p>
+                                    </div>
+                                    <div class="col-md-4 p-n">
+                                        <input class="col-md-7 p-n" type="number" max="10" min="0" name="anxiety"
+                                               required>
+                                        <p class="col-md-4">/10</p>
+                                    </div>
+                                </div>
+
+                                {# Payment method #}
+                                <div class="col-md-3">
+                                    <div class="col-md-8 col-md-offset-1 p-n">
+                                        <p>Mode de réglement :</p>
+                                    </div>
+                                    <div class="col-md-2 p-n">
+                                        <select name="payment">
+                                            {% for payment_method in get_list_payment_method() %}
+                                                <option value="{{ payment_method.id }}">
+                                                    {{ payment_method.label }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {# Price #}
+                                <div class="col-md-3">
+                                    <div class="col-md-4 col-md-offset-1 p-n">
+                                        <p>Prix:</p>
+                                    </div>
+                                    <div class="col-md-7 p-n">
+                                        <input class="col-md-7 p-n" type="number" min="0" name="price" required>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="formHorizontalDivider"></div>
+
+                            <div class="row">
+
+                                {# Keywords #}
+                                <div class="col-md-3">
+                                    <p class="col-md-offset-1">Mots clé :</p>
+                                    <div class="col-md-offset-2">
+                                        <textarea name="keywords" cols="20" rows="4"></textarea>
+                                    </div>
+                                </div>
+
+                                {# Behaviors #}
+                                <div class="col-md-3">
+                                    <p class="col-md-offset-1">Comportements :</p>
+                                    <div class="col-md-offset-2">
+                                        <textarea name="behaviors" cols="20" rows="4"></textarea>
+                                    </div>
+                                </div>
+
+                                {# Postures #}
+                                <div class="col-md-3">
+                                    <p class="col-md-offset-1">Postures :</p>
+                                    <div class="col-md-offset-2">
+                                        <textarea name="postures" cols="20" rows="4"></textarea>
+                                    </div>
+                                </div>
+
+                                {#Participants#}
+                                <div class="col-md-3">
+                                    <p class="col-md-offset-1">Participants :</p>
+                                    <div class="col-md-offset-2">
+                                        <p>
+                                            {% if next_consultation.type != "Enfant" %}
+                                                {{ next_consultation.type }}
+                                            {% endif %}
+                                            {{ next_consultation.forename }} {{ next_consultation.name }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <button type="submit" class="btn btn-primary col-md-2 col-md-offset-10 m-t-md m-b-n">
+                                Terminer
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+    {% endblock content %}
+
+{% endblock body %}
+

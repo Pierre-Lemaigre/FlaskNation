@@ -49,20 +49,17 @@
                             <label>Participant : </label>
                             <select name="participants" class="m-l">
 
-                                {% if list_patient is defined %}
+                                {% for patient in get_list_patient() %}
 
-                                    {% for patient in list_patient %}
+                                    <option value="{{ patient.id }}"
+                                            {% if data is defined and data.participants == patient.id %}
+                                            selected {% endif %}>
+                                        {% if patient.type != "Enfant" %}
+                                            {{ patient.type }} {% endif %}
+                                        {{ patient.name }} {{ patient.forename }}
+                                    </option>
 
-                                        <option value="{{ patient.id }}"
-                                                {% if data is defined and data.participants == patient.id %}
-                                                selected {% endif %}>
-                                            {% if patient.type != "Enfant" %}
-                                                {{ patient.type }} {% endif %}
-                                            {{ patient.name }} {{ patient.forename }}
-                                        </option>
-
-                                    {% endfor %}
-                                {% endif %}
+                                {% endfor %}
 
                             </select>
 

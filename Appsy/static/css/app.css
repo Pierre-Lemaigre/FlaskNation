@@ -80,6 +80,10 @@ a h3 {
     color: white;
 }
 
+.h4_home {
+    color: white;
+}
+
 /*Past appointments patient*/
 
 .desc {
@@ -114,23 +118,26 @@ a h3 {
 
 /* Add patient  */
 
-.formHorizontalDivider{
-   height: 4em;
+.formHorizontalDivider {
+    height: 4em;
 }
 
 /* View consultations */
 
-label a{
+label a {
     color: white;
 }
 
-label a:hover{
+label a:hover {
     font-size: 110%;
     color: white;
 }
 
+/* Consulter */
 
-
+textarea {
+    resize: vertical;
+}
 
 
 /* MARGINS & PADDINGS */

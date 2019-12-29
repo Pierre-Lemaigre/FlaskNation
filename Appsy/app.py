@@ -1,13 +1,11 @@
 import locale
+import Connection
 
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_bootstrap import Bootstrap
-
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-
 from CalendarManager import *
-import Connection
 
 app = Flask(__name__)
 
@@ -29,6 +27,8 @@ calendar_manager = CalendarManager()
 locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
 
 # Virtual BD
+next_consultation = dict(id=0, date="2019-12-27", hour="14h30", anxiety=2, payment="Carte", pice=45, type="Mr",
+                         forename="Antoine", name="Dupond")
 
 list_patient = [
     dict(id=0, type="Mr", forename="Antoine", name="Dupond", birthDate="1998-09-30", knowing=0, relationship=1,
@@ -55,10 +55,10 @@ day_slots = [
 ]
 
 list_consultations_day = [
-    dict(id=0, date="2019-12-27", hour="14h30", anxity=2, type=0, payment="Carte", pice=45, participant=0),
-    dict(id=1, date="2019-12-27", hour="10h00", anxity=5, type=1, payment="Chèque", pice=30, participant=1),
-    dict(id=2, date="2019-12-27", hour="16h30", anxity=8, type=2, payment="Cash", pice=45, participant=2),
-    dict(id=3, date="2019-12-27", hour="19h30", anxity=10, type=0, payment="Carte", pice=45, participant=0),
+    dict(id=0, date="2019-12-27", hour="14h30", anxiety=2, type=0, payment="Carte", pice=45, participant=0),
+    dict(id=1, date="2019-12-27", hour="10h00", anxiety=5, type=1, payment="Chèque", pice=30, participant=1),
+    dict(id=2, date="2019-12-27", hour="16h30", anxiety=8, type=2, payment="Cash", pice=45, participant=2),
+    dict(id=3, date="2019-12-27", hour="19h30", anxiety=10, type=0, payment="Carte", pice=45, participant=0),
 ]
 
 list_consultations_week = [
@@ -71,10 +71,16 @@ list_consultations_week = [
 ]
 
 list_consultations_patient = [
-    dict(id=0, date="2020-01-01", hour="14h30", anxity=2, type=0, payment="Carte", pice=45, participant=1),
-    dict(id=1, date="2020-02-02", hour="10h00", anxity=5, type=1, payment="Chèque", pice=30, participant=1),
-    dict(id=2, date="2020-03-03", hour="16h30", anxity=8, type=2, payment="Cash", pice=45, participant=1),
-    dict(id=3, date="2020-04-04", hour="19h30", anxity=10, type=0, payment="Carte", pice=45, participant=0),
+    dict(id=0, date="2020-01-01", hour="14h30", anxiety=2, type=0, payment="Carte", pice=45, participant=1),
+    dict(id=1, date="2020-02-02", hour="10h00", anxiety=5, type=1, payment="Chèque", pice=30, participant=1),
+    dict(id=2, date="2020-03-03", hour="16h30", anxiety=8, type=2, payment="Cash", pice=45, participant=1),
+    dict(id=3, date="2020-04-04", hour="19h30", anxiety=10, type=0, payment="Carte", pice=45, participant=0),
+]
+
+list_payment_method = [
+    dict(id=0, label="Carte"),
+    dict(id=1, label="Chèque"),
+    dict(id=2, label="Cash")
 ]
 
 
@@ -124,6 +130,33 @@ def utility_processor():
     return dict(today=get_today_date)
 
 
+@app.context_processor
+def utility_processor():
+    def get_list_payment_method():
+        # Todo get payment method from DB
+        return list_payment_method
+
+    return dict(get_list_payment_method=get_list_payment_method)
+
+
+@app.context_processor
+def utility_processor():
+    def get_list_patient():
+        # Todo get patient from DB
+        return list_patient
+
+    return dict(get_list_patient=get_list_patient)
+
+
+@app.context_processor
+def utility_processor():
+    def get_list_profession():
+        # Todo get profession from DB
+        return list_profession
+
+    return dict(get_list_profession=get_list_profession)
+
+
 @app.route('/', methods=['POST', 'GET'])
 def go_to_connection():
     logout_user()
@@ -148,7 +181,7 @@ def go_to_connection():
 @register_breadcrumb(app, '.', 'Accueil')
 def go_to_home():
     if current_user.username == "admin":
-        return custom_render_template(render_template('pages/home_psy.html'))
+        return custom_render_template(render_template('pages/home_psy.html', next_consultation=next_consultation))
     else:
         return custom_render_template(render_template('pages/home_patient.html'))
 
@@ -185,7 +218,7 @@ def go_to_add_patient():
         return redirect(url_for('go_to_home'))
     else:
         return custom_render_template(
-            render_template('pages/add_patient.html', list_profession=list_profession, list_patient=list_patient))
+            render_template('pages/add_patient.html'))
 
 
 @app.route('/Recherche patient', methods=['POST', 'GET'])
@@ -197,7 +230,7 @@ def go_to_search_patient():
         # TODO Search
         search = request.form['search']
 
-        return custom_render_template(render_template('pages/search_patient.html', list_patient=list_patient))
+        return custom_render_template(render_template('pages/search_patient.html'))
     else:
         return custom_render_template(render_template('pages/search_patient.html'))
 
@@ -216,7 +249,7 @@ def go_to_view_update_patient(id):
         return redirect(url_for('go_to_home'))
     else:
         return render_template('pages/view_update_patient.html',
-                               patient=find_patient(id), list_patient=list_patient, list_profession=list_profession)
+                               patient=find_patient(id))
 
 
 @app.route('/Supprimer patient/<int:id>', methods=['POST'])
@@ -240,9 +273,9 @@ def go_to_add_consultation():
         data = dict(wanted_date=wanted_date, consultation_type=consultation_type, participants=participants)
 
         return custom_render_template(
-            render_template('pages/add_consultation.html', data=data, day_slots=day_slots, list_patient=list_patient))
+            render_template('pages/add_consultation.html', data=data, day_slots=day_slots))
     else:
-        return custom_render_template(render_template('pages/add_consultation.html', list_patient=list_patient))
+        return custom_render_template(render_template('pages/add_consultation.html'))
 
 
 @app.route('/add_consultation', methods=['POST', 'GET'])
@@ -256,6 +289,34 @@ def add_consultation():
     return redirect(url_for('go_to_home'))
 
 
+@app.route('/Consulter/<int:id>', methods=['POST', 'GET'])
+@login_required
+# @register_breadcrumb(app, '.Accueil', 'Consulter')
+def go_to_consulter(id):
+    if request.method == 'POST':
+
+        if 'id_consultation' in request.form:
+
+            # Todo Get next consult
+            id_consultation = request.form['id_consultation']
+            return custom_render_template(
+                render_template('pages/consulter.html', next_consultation=next_consultation))
+        else:
+
+            # TODO Post consultation
+            id_consultation = id
+            anxiety = request.form['anxiety']
+            payment = request.form['payment']
+            price = request.form['price']
+            keywords = request.form['keywords']
+            behaviors = request.form['behaviors']
+            postures = request.form['postures']
+
+            return redirect(url_for('go_to_home'))
+    else:
+        return redirect(url_for('go_to_home'))
+
+
 @app.route('/Mes consultations/<int:sort>/<int:nav>', methods=['POST', 'GET'])
 @login_required
 @register_breadcrumb(app, '.Accueil.a', 'Mes consultations')
@@ -267,7 +328,7 @@ def go_to_view_consultations(sort, nav):
 
         return custom_render_template(
             render_template('pages/view_consultations.html', list_consultations_patient=list_consultations_patient,
-                            list_patient=list_patient, id_patient=id_patient, sort=sort))
+                            id_patient=id_patient, sort=sort))
     else:
         if sort == 0:
             if nav == 0:
@@ -293,7 +354,7 @@ def go_to_view_consultations(sort, nav):
                                 sort=sort, date=date, nav=calendar_manager.get_week_offset()))
         else:
             return custom_render_template(
-                render_template('pages/view_consultations.html', list_patient=list_patient, sort=sort))
+                render_template('pages/view_consultations.html', sort=sort))
 
 
 @app.route('/Deconnexion')

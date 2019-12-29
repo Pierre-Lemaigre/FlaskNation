@@ -37,14 +37,12 @@
                                 <option value="-2">Celibataire</option>
                                 <option value="-1">Non patient</option>
 
-                                {% if list_patient is defined %}
-                                    {% for relationship in list_patient %}
-                                        <option value="{{ relationship.id }}">
-                                            {% if relationship.type != "Enfant" %} {{ relationship.type }} {% endif %}
-                                            {{ relationship.name }} {{ relationship.forename }}
-                                        </option>
-                                    {% endfor %}
-                                {% endif %}
+                                {% for relationship in get_list_patient() %}
+                                    <option value="{{ relationship.id }}">
+                                        {% if relationship.type != "Enfant" %} {{ relationship.type }} {% endif %}
+                                        {{ relationship.name }} {{ relationship.forename }}
+                                    </option>
+                                {% endfor %}
 
                             </select>
                         </div>
@@ -87,11 +85,9 @@
                             <select class="col-md-6" name="profession">
                                 <option value="-1">+ Nouveau +</option>
 
-                                {% if list_profession is defined %}
-                                    {% for profession in list_profession %}
-                                        <option value="{{ profession.id }}">{{ profession.label }}</option>
-                                    {% endfor %}
-                                {% endif %}
+                                {% for profession in get_list_profession() %}
+                                    <option value="{{ profession.id }}">{{ profession.label }}</option>
+                                {% endfor %}
 
                             </select>
 
