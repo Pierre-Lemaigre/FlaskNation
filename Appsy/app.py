@@ -278,6 +278,8 @@ def go_to_add_consultation():
         participants3 = int(request.form['participants3'])
         participants = [participants1, participants2, participants3]
 
+        # TODO if consultation_type = 1 (consult de couple) get participants2 (girlfriend/boyfriend)
+
         data = dict(wanted_date=wanted_date, consultation_type=consultation_type, participants=participants)
 
         return custom_render_template(
@@ -290,7 +292,6 @@ def go_to_add_consultation():
 @login_required
 def add_consultation():
     if request.method == 'POST':
-
         # TODO Add consultation
         data = request.form['data']
         id_time_slot = request.form['id_time_slot']
