@@ -1,10 +1,11 @@
 import locale
-import Connection
 
 from flask import Flask, render_template, request, redirect, url_for, make_response
-from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_bootstrap import Bootstrap
+from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+
+import Connection
 from CalendarManager import *
 
 app = Flask(__name__)
@@ -213,7 +214,11 @@ def go_to_add_patient():
         forename = request.form['forename']
         birthDate = request.form['birthDate']
         knowing = request.form['knowing']
-        profession = request.form['profession']
+        profession1 = request.form['profession1']
+        profession2 = request.form['profession2']
+        profession3 = request.form['profession3']
+        profession4 = request.form['profession4']
+        profession5 = request.form['profession5']
 
         return redirect(url_for('go_to_home'))
     else:
@@ -268,7 +273,10 @@ def go_to_add_consultation():
         # TODO Get day_slots
         wanted_date = request.form['wanted_date']
         consultation_type = int(request.form['consultation_type'])
-        participants = int(request.form['participants'])
+        participants1 = int(request.form['participants1'])
+        participants2 = int(request.form['participants2'])
+        participants3 = int(request.form['participants3'])
+        participants = [participants1, participants2, participants3]
 
         data = dict(wanted_date=wanted_date, consultation_type=consultation_type, participants=participants)
 
@@ -282,11 +290,12 @@ def go_to_add_consultation():
 @login_required
 def add_consultation():
     if request.method == 'POST':
+
         # TODO Add consultation
-        date = request.form['date']
+        data = request.form['data']
         id_time_slot = request.form['id_time_slot']
 
-    return redirect(url_for('go_to_home'))
+        return redirect(url_for('go_to_home'))
 
 
 @app.route('/Consulter/<int:id>', methods=['POST', 'GET'])

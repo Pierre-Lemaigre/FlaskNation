@@ -27,7 +27,8 @@
 
                         <div class="col-md-3 well-sm">
                             <label>Type consultation : </label>
-                            <select name="consultation_type" class="m-l">
+                            <select name="consultation_type" class="m-l" id="consultation_type"
+                                    onchange="displayOrNot_add_remove_patient()">
                                 <option {% if data is defined and data.consultation_type == 0 %} selected {% endif %}
                                                                                                  value="0">Seul
                                 </option>
@@ -47,7 +48,9 @@
                         <div class="col-md-12 well-sm">
 
                             <label>Participant : </label>
-                            <select name="participants" class="m-l">
+                            <select name="participants1" class="m-l">
+
+                                <option value="-1"> -- Choisir --</option>
 
                                 {% for patient in get_list_patient() %}
 
@@ -63,18 +66,43 @@
 
                             </select>
 
-                            <div class="m-l-md">
-                                <img class="m-n"
-                                     src="{{ url_for('static', filename='img/minus_black.png') }}"
-                                     height="20" width="20">
+                            <select name="participants2" id="participants2" class="m-l" style="display: none">
 
-                                <img class="m-n"
-                                     src="{{ url_for('static', filename='img/add_black.png') }}"
-                                     height="20" width="20">
-                            </div>
+                                <option value="-1"> -- Choisir --</option>
+
+                                {% for patient in get_list_patient() %}
+
+                                    <option value="{{ patient.id }}"
+                                            {% if data is defined and data.participants == patient.id %}
+                                            selected {% endif %}>
+                                        {% if patient.type != "Enfant" %}
+                                            {{ patient.type }} {% endif %}
+                                        {{ patient.name }} {{ patient.forename }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                            <select name="participants3" id="participants3" class="m-l" style="display: none">
+
+                                <option value="-1"> -- Choisir --</option>
+
+                                {% for patient in get_list_patient() %}
+
+                                    <option value="{{ patient.id }}"
+                                            {% if data is defined and data.participants == patient.id %}
+                                            selected {% endif %}>
+                                        {% if patient.type != "Enfant" %}
+                                            {{ patient.type }} {% endif %}
+                                        {{ patient.name }} {{ patient.forename }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
 
                         </div>
-
 
                     </form>
 
@@ -88,10 +116,9 @@
                         {% for slot in day_slots %}
 
                             <form id="form" method="post" action="{{ url_for('add_consultation') }}">
-                                <input name="date" type="hidden" value="{{ wanted_date }}">
+                                <input name="data" type="hidden" value="{{ data }}">
                                 <input name="id_time_slot" type="hidden" value="{{ slot.id }}">
-                                <a href="{{ url_for('add_consultation') }}"
-                                   onclick="document.getElementById('myform').submit()">
+                                <a onclick="validateForm();" >
                                     <div class="col-md-12 roundedborder container m-t-sm">
                                         <h4>
                                             {{ slot.label }}
@@ -110,6 +137,10 @@
         </div>
 
     {% endblock content %}
+
+    {% block scripts %}
+        <script src="{{ url_for('static', filename='js/add_consultation.js') }}"></script>
+    {% endblock scripts %}
 
 {% endblock body %}
 
