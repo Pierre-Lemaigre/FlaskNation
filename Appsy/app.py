@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 from flask_bootstrap import Bootstrap
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from flask_sqlalchemy import SQLAlchemy
 
 import Connection
 from CalendarManager import *
@@ -26,6 +27,13 @@ login_manager.init_app(app)
 # For calendar
 calendar_manager = CalendarManager()
 locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
+
+
+# Oracle BD Configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://system:Pierrot123@0.0.0.0:1521/PSYAPP'
+oracle_database = SQLAlchemy(app=app)
+
+
 
 # Virtual BD
 next_consultation = dict(id=0, date="2019-12-27", hour="14h30", anxiety=2, payment="Carte", pice=45, type="Mr",
