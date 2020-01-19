@@ -1,12 +1,14 @@
 -- Destruction des triggers en place -- 
-DROP TRIGGER consultation_id_consultation;
+DROP TRIGGER patient_id;
+DROP TRIGGER profession_id;
 DROP TRIGGER creneau_horaire_id_creneau_horaire;
-DROP TRIGGER profession_id_profession;
+DROP TRIGGER consultation_id;
 
 -- Desctruction des sequences en place --
-DROP SEQUENCE Seq_consultation_id_consultation;
+DROP SEQUENCE Seq_profession_id;
 DROP SEQUENCE Seq_creneau_horaire_id_creneau_horaire;
-DROP SEQUENCE Seq_profession_id_profession;
+DROP SEQUENCE Seq_patient_id;
+DROP SEQUENCE Seq_consultation_id;
 
 -- Suppression des tables en place --
 DROP TABLE SEANCE CASCADE CONSTRAINTS;

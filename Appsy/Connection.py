@@ -1,7 +1,7 @@
 from passlib.hash import pbkdf2_sha256
 from User import User
 from VirtualDatabase import list_patient
-
+from app import Patient
 
 # TODO
 def virtual_bd():
@@ -21,31 +21,21 @@ def is_password_valid(plain_password, encrypt_password):
     return pbkdf2_sha256.verify(plain_password, encrypt_password)
 
 
-# TODO
-def get_user_from_virtual_bd(username):
-    for row in virtual_bd():
-        if row['username'] == username:
-            return User(row["id"], row["username"], row["password"])
-    return None
-
-
 def get_user_by_id(id):
-    # TODO
-    # SELECT ID, USERNAME, PASSWORD FROM USERS WHERE ID = id
-    for row in virtual_bd():
-        if row['id'] == int(id):
-            return User(row["id"], row["username"], row["password"])
-
-    return None
+    patient = None
+    patient = Patient.query.get(id)
+    if patient is None:
+        return None
+    return User(patient.id_pa, patient.username, patient.password)
 
 
 def get_user(username, plain_password):
     # SELECT ID, USERNAME, PASSWORD FROM USERS WHERE USERNAME = username
-    user = get_user_from_virtual_bd(username)
+    user = Patient.query.get(1)
 
     if user is not None:
 
-        id = user.id
+        id = user.id_pa
         encrypt_password = user.password
 
         if is_password_valid(plain_password, encrypt_password):

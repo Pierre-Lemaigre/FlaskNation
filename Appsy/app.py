@@ -5,7 +5,6 @@ from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy, Model
 from datetime import datetime
-
 import Connection
 from CalendarManager import *
 from VirtualDatabase import *
@@ -34,79 +33,65 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://system:Pierrot123@0.0.0.0:1521
 database = SQLAlchemy(app=app)
 
 
-
-a_exerce = database.Table('historique_profession',
-                          database.Column('id_profession', database.ForeignKey('profession.id_profession'), primary_key=True),
-                          database.Column('email', database.ForeignKey('patient.email'), primary_key=True))
+ont_exerce = database.Table('ont_exerce',
+                          database.Column('id_pr', database.ForeignKey('profession.id_pr'), primary_key=True),
+                          database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
 
 
 seances = database.Table('seances',
-                         database.Column('id_consultation', database.ForeignKey('consultation.id_consultation'), primary_key=True),
-                         database.Column('email', database.ForeignKey('patient.email'), primary_key=True))
+                         database.Column('id_co', database.ForeignKey('consultation.id_co'), primary_key=True),
+                         database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
 
 
 class Patient(database.Model):
     __tablename__ = 'patient'
-    email = database.Column(database.String(50), primary_key=True)
-    mot_de_passe = database.Column(database.String(88))
-    nom = database.Column(database.String(50), nullable=False)
-    prenom = database.Column(database.String(50), nullable=False)
-    age = database.Column(database.Integer, nullable=False)
-    adresse = database.Column(database.String(128), nullable=False)
-    connaissance = database.Column(database.String(30), nullable=False)
-    classification = database.Column(database.String(10), nullable=False)
-    id_profession = database.Column(database.Integer, database.ForeignKey('profession.id_profession'),
-                                    nullable=False)
-    historique_profession = database.relationship('Profession', secondary=a_exerce,
+    id_pa = database.Column(database.Integer, primary_key=True)
+    username = database.Column(database.String(50), nullable=False)
+    password = database.Column(database.String(88), nullable=False)
+    pname = database.Column(database.String(20), nullable=False)
+    forname = database.Column(database.String(20), nullable=False)
+    birthdate = database.Column(database.DateTime, default=datetime.utcnow, nullable=False)
+    knowing = database.Column(database.Integer, nullable=False)
+    relationship = database.Column(database.Integer, nullable=False)
+    historique_profession = database.relationship('Profession', secondary=ont_exerce,
                                                   backref=database.backref('a_exerce', lazy='dynamic'))
     historique_seance = database.relationship('Consultation', secondary=seances,
-                                              backref=database.backref('Seance', lazy='dynamic'))
-
-    def __repr__(self):
-        return "<Patient(email='%s', nom='%s', prenom='%s', age='%d', \
-                    adresse='%s', connaissance='%s', classification='%s')>" \
-                    % (self.email, self.nom, self.prenom, self.age,
-                       self.adresse, self.connaissance, self.classification)
+                                              backref=database.backref('seances', lazy='dynamic'))
 
 
 class Profession(database.Model):
     __tablename__ = 'profession'
-    id_profession = database.Column(database.Integer, primary_key=True)
-    profession = database.Column(database.String(50), nullable=False)
+    id_pr = database.Column(database.Integer, primary_key=True)
+    label = database.Column(database.String(50), nullable=False)
 
     def __repr__(self):
-        return "<Profession(id='%d', Nom='%s')>" % (self.id_profession, self.profession)
+        return "<Profession(id='%d', Label='%s')>" % (self.id, self.label)
 
 
 class Creneau_horaire(database.Model):
     __tablename__ = 'creneau_horaire'
     id_creneau_horaire = database.Column(database.Integer, primary_key=True)
-    heure_debut_creneau = database.Column(database.Integer, nullable=False)
-    heure_fin_creneau = database.Column(database.Integer, nullable=False)
-    jour_de_la_semaine = database.Column(database.Integer, nullable=False)
+    h_debut = database.Column(database.String(10), nullable=False)
+    h_fin = database.Column(database.String(10), nullable=False)
 
     def __repr__(self):
-        return "<Creneau_horaire(date_debut_creneau='%d',\
-            date_fin_creneau='%d', jour_de_la_semaine='%s')>" % \
-            (self.date_debut_creneau, self.date_fin_creneau,
-             self.jour_de_la_semaine)
+        return "<Creneau_horaire(date_debut_creneau='%s',\
+            date_fin_creneau='%s',)>" % \
+            (self.h_debut, self.h_fin)
 
 
 class Consultation(database.Model):
     __tablename__ = 'consultation'
-    id_consultation = database.Column(database.Integer, primary_key=True)
-    date_consultation = database.Column(database.DateTime, default=datetime.utcnow, nullable=False)
-    comportement = database.Column(database.String(20), nullable=False)
-    remarque = database.Column(database.String(200), nullable=False)
-    anxiete = database.Column(database.Integer, nullable=False)
-    posture = database.Column(database.String(20), nullable=False)
+    id_co = database.Column(database.Integer, primary_key=True)
+    datec = database.Column(database.DateTime, default=datetime.utcnow, nullable=False)
+    anxiety = database.Column(database.Integer, nullable=False)
+    typec = database.Column(database.Integer, nullable=False)
+    payment = database.Column(database.Integer, nullable=False)
+    price = database.Column(database.Integer, nullable=False)
+    keywords = database.Column(database.String(255), nullable=False)
+    behaviors = database.Column(database.String(255), nullable=False)
+    postures = database.Column(database.String(255), nullable=False)
     id_creneau_horaire = database.Column(database.Integer, database.ForeignKey('creneau_horaire.id_creneau_horaire'), nullable=False)
-
-
-def find_patient(id):
-    for row in list_patient:
-        if row['id'] == id:
-            return row
 
 
 # Render template + Ensure responses aren't cached
@@ -158,7 +143,7 @@ def utility_processor():
 @app.context_processor
 def utility_processor():
     def get_list_payment_method():
-        # Todo get payment method from DB
+        list_payment_method = {0: 'carte', 1: 'Chèque', 2: 'espece'}
         return list_payment_method
 
     return dict(get_list_payment_method=get_list_payment_method)
@@ -168,7 +153,7 @@ def utility_processor():
 @app.context_processor
 def utility_processor():
     def get_list_patient():
-        # Todo get patient from DB
+        list_patient = Patient.query.all()
         return list_patient
 
     return dict(get_list_patient=get_list_patient)
@@ -178,7 +163,7 @@ def utility_processor():
 @app.context_processor
 def utility_processor():
     def get_list_profession():
-        # Todo get profession from DB
+        list_profession = Profession.query.all()
         return list_profession
 
     return dict(get_list_profession=get_list_profession)
@@ -188,8 +173,7 @@ def utility_processor():
 @app.context_processor
 def utility_processor():
     def get_data_current_user():
-        return find_patient(current_user.id)
-
+        return Patient.query.get(current_user.id)
     return dict(get_data_current_user=get_data_current_user)
 
 
@@ -332,15 +316,16 @@ def go_to_view_update_patient(id):
 
     # Display the specified patient
     else:
-        return render_template('pages/view_update_patient.html',
-                               patient=find_patient(id))
+        return render_template('pages/view_update_patient.html')
+        # TODO Find patient by id)
 
 
 # Delete a patient
 @app.route('/Supprimer patient/<int:id>', methods=['POST'])
 @login_required
 def delete_patient(id):
-    # TODO Delete id
+    database.session.delete(id)
+    database.session.commit()
     return redirect(url_for('go_to_home'))
 
 
@@ -376,11 +361,11 @@ def go_to_add_consultation():
 @login_required
 def add_consultation():
     if request.method == 'POST':
-
-        # TODO Add consultation
         data = request.form['data']
         id_time_slot = request.form['id_time_slot']
-
+        consultation = Consultation(data['datec'], 0, data['typec'], 0, 0, '-', '-', '-', data['typec'], id_time_slot)
+        database.session.add(consultation)
+        database.session.commit()
         return redirect(url_for('go_to_home'))
 
     # An error as occurred
@@ -406,8 +391,6 @@ def go_to_consulter(id):
 
         # Save consultation
         else:
-
-            # TODO Post consultation
             id_consultation = id
             anxiety = request.form['anxiety']
             payment = request.form['payment']
@@ -416,6 +399,14 @@ def go_to_consulter(id):
             behaviors = request.form['behaviors']
             postures = request.form['postures']
 
+            consultation = Consultation.query.get(id)
+            consultation.anxiety = anxiety
+            consultation.payment = payment
+            consultation.price = price
+            consultation.keywords = keywords
+            consultation.behaviors = postures
+
+            database.session.commit()
             return redirect(url_for('go_to_home'))
 
     # An error as occurred
