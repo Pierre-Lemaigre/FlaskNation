@@ -36,7 +36,7 @@
 
                         {% if match_patient is defined %}
                             {% for patient in match_patient %}
-                                <a href="{{ url_for('go_to_view_update_patient', id=patient.id) }}">
+                                <a href="{{ url_for('go_to_view_update_patient', id=patient.id_pa) }}">
                                     <div class="col-md-12 roundedborder container m-t-sm">
                                         <h5>
                                             {% if patient.type != "Enfant" %} {{ patient.type }} {% endif %}

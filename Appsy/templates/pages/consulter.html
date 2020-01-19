@@ -110,14 +110,17 @@
                                 {#Participants#}
                                 <div class="col-md-3">
                                     <p class="col-md-offset-1">Participants :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>
-                                            {% if next_consultation.type != "Enfant" %}
-                                                {{ next_consultation.type }}
-                                            {% endif %}
-                                            {{ next_consultation.forename }} {{ next_consultation.name }}
-                                        </p>
-                                    </div>
+
+                                    {% for participant in next_consultation.participants %}
+                                        <div class="col-md-offset-2">
+                                            <p>
+                                                {% if participant.type != "Enfant" %}
+                                                    {{ participant.type }}
+                                                {% endif %}
+                                                {{ participant.forename }} {{ participant.name }}
+                                            </p>
+                                        </div>
+                                    {% endfor %}
                                 </div>
 
                             </div>

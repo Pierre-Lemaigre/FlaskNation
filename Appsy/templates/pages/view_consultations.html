@@ -346,8 +346,8 @@
                                         Patient :
                                         <select name="id_patient">
                                             {% for patient in get_list_patient() %}
-                                                <option value="{{ patient.id }}"
-                                                        {% if id_patient == patient.id %} selected {% endif %}>
+                                                <option value="{{ patient.id_pa }}"
+                                                        {% if id_patient == patient.id_pa %} selected {% endif %}>
                                                     {% if patient.type != "Enfant" %}
                                                         {{ patient.type }} {% endif %}
                                                     {{ patient.name }} {{ patient.forename }}

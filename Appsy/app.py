@@ -1,10 +1,16 @@
 import locale
+
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_bootstrap import Bootstrap
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+<<<<<<< HEAD
 from flask_sqlalchemy import SQLAlchemy, Model
 from datetime import datetime
+=======
+from flask_sqlalchemy import SQLAlchemy
+
+>>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 import Connection
 from CalendarManager import *
 from VirtualDatabase import *
@@ -29,18 +35,31 @@ calendar_manager = CalendarManager()
 locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
 
 # Oracle BD Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://system:Pierrot123@0.0.0.0:1521/app'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://system:Pierrot123@0.0.0.0:1521/app'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 database = SQLAlchemy(app=app)
 
+<<<<<<< HEAD
 
 ont_exerce = database.Table('ont_exerce',
                           database.Column('id_pr', database.ForeignKey('profession.id_pr'), primary_key=True),
                           database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
-
+=======
+a_exerce = database.Table('historique_profession',
+                          database.Column('id_profession', database.ForeignKey('profession.id_profession'),
+                                          primary_key=True),
+                          database.Column('email', database.ForeignKey('patient.email'), primary_key=True))
+>>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 seances = database.Table('seances',
+<<<<<<< HEAD
                          database.Column('id_co', database.ForeignKey('consultation.id_co'), primary_key=True),
                          database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
+=======
+                         database.Column('id_consultation', database.ForeignKey('consultation.id_consultation'),
+                                         primary_key=True),
+                         database.Column('email', database.ForeignKey('patient.email'), primary_key=True))
+>>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 
 class Patient(database.Model):
@@ -56,7 +75,17 @@ class Patient(database.Model):
     historique_profession = database.relationship('Profession', secondary=ont_exerce,
                                                   backref=database.backref('a_exerce', lazy='dynamic'))
     historique_seance = database.relationship('Consultation', secondary=seances,
+<<<<<<< HEAD
                                               backref=database.backref('seances', lazy='dynamic'))
+=======
+                                              backref=database.backref('Seance', lazy='dynamic'))
+
+    def __repr__(self):
+        return "<Patient(email='%s', nom='%s', prenom='%s', age='%d', \
+                    adresse='%s', connaissance='%s', classification='%s')>" \
+               % (self.email, self.nom, self.prenom, self.age,
+                  self.adresse, self.connaissance, self.classification)
+>>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 
 class Profession(database.Model):
@@ -75,13 +104,21 @@ class Creneau_horaire(database.Model):
     h_fin = database.Column(database.String(10), nullable=False)
 
     def __repr__(self):
+<<<<<<< HEAD
         return "<Creneau_horaire(date_debut_creneau='%s',\
             date_fin_creneau='%s',)>" % \
             (self.h_debut, self.h_fin)
+=======
+        return "<Creneau_horaire(date_debut_creneau='%d',\
+            date_fin_creneau='%d', jour_de_la_semaine='%s')>" % \
+               (self.date_debut_creneau, self.date_fin_creneau,
+                self.jour_de_la_semaine)
+>>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 
 class Consultation(database.Model):
     __tablename__ = 'consultation'
+<<<<<<< HEAD
     id_co = database.Column(database.Integer, primary_key=True)
     datec = database.Column(database.DateTime, default=datetime.utcnow, nullable=False)
     anxiety = database.Column(database.Integer, nullable=False)
@@ -92,6 +129,16 @@ class Consultation(database.Model):
     behaviors = database.Column(database.String(255), nullable=False)
     postures = database.Column(database.String(255), nullable=False)
     id_creneau_horaire = database.Column(database.Integer, database.ForeignKey('creneau_horaire.id_creneau_horaire'), nullable=False)
+=======
+    id_consultation = database.Column(database.Integer, primary_key=True)
+    date_consultation = database.Column(database.DateTime, default=datetime.utcnow, nullable=False)
+    comportement = database.Column(database.String(20), nullable=False)
+    remarque = database.Column(database.String(200), nullable=False)
+    anxiete = database.Column(database.Integer, nullable=False)
+    posture = database.Column(database.String(20), nullable=False)
+    id_creneau_horaire = database.Column(database.Integer, database.ForeignKey('creneau_horaire.id_creneau_horaire'),
+                                         nullable=False)
+>>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 
 # Render template + Ensure responses aren't cached
@@ -224,7 +271,7 @@ def go_to_home():
 # Display past appointments (for patient)
 @app.route('/Rendez-vous_passes')
 @login_required
-@register_breadcrumb(app, '.Accueil.', 'Rendez-vous passes')
+@register_breadcrumb(app, '.a', 'Rendez-vous passes')
 def go_to_past_appointments():
     return custom_render_template(render_template('pages/past_appointments_patient.html'))
 
@@ -232,7 +279,7 @@ def go_to_past_appointments():
 # Display upcoming appointments (for patient)
 @app.route('/Rendez-vous_futurs')
 @login_required
-@register_breadcrumb(app, '.Accueil.', 'Rendez-vous futurs')
+@register_breadcrumb(app, '.b', 'Rendez-vous futurs')
 def go_to_upcoming_appointments():
     return custom_render_template(render_template('pages/upcoming_appointments_patient.html'))
 
@@ -240,7 +287,7 @@ def go_to_upcoming_appointments():
 # Manage the adding of a new patient
 @app.route('/Ajouter patient', methods=['POST', 'GET'])
 @login_required
-@register_breadcrumb(app, '.Accueil.', 'Ajouter patient')
+@register_breadcrumb(app, '.c', 'Ajouter patient')
 def go_to_add_patient():
     # Save the new patient
     if request.method == 'POST':
@@ -271,7 +318,7 @@ def go_to_add_patient():
 # Display the searched patient or the page to search a patient
 @app.route('/Recherche patient', methods=['POST', 'GET'])
 @login_required
-@register_breadcrumb(app, '.Accueil.', 'Rechercher patient')
+@register_breadcrumb(app, '.d', 'Rechercher patient')
 def go_to_search_patient():
     # If a search as been made
     if request.method == 'POST':
@@ -289,17 +336,14 @@ def go_to_search_patient():
 # Manage the search or update of a patient
 @app.route('/Afficher Modifier Patient/<int:id>', methods=['POST', 'GET'])
 @login_required
-@register_breadcrumb(app, '.Accueil.Rechercher patient.', 'Afficher - Modifier Patient')
+@register_breadcrumb(app, '.d.e', 'Afficher - Modifier Patient')
 def go_to_view_update_patient(id):
     # Update the patient's data
     if request.method == 'POST':
 
         # TODO Update
-        name = request.form['name']
         type = request.form['type']
         relationship = request.form['relationship']
-        forename = request.form['forename']
-        birthDate = request.form['birthDate']
         knowing = request.form['knowing']
         profession1 = request.form['profession1']
         profession2 = request.form['profession2']
@@ -332,7 +376,7 @@ def delete_patient(id):
 # Manage the adding of a new consultation
 @app.route('/Ajout consultation', methods=['POST', 'GET'])
 @login_required
-@register_breadcrumb(app, '.Accueil', 'Ajout consultation')
+@register_breadcrumb(app, '.f', 'Ajout consultation')
 def go_to_add_consultation():
     # Setting up the new consultation
     if request.method == 'POST':
@@ -341,11 +385,16 @@ def go_to_add_consultation():
         wanted_date = request.form['wanted_date']
         consultation_type = int(request.form['consultation_type'])
         participants1 = int(request.form['participants1'])
-        participants2 = int(request.form['participants2'])
-        participants3 = int(request.form['participants3'])
-        participants = [participants1, participants2, participants3]
 
-        # TODO if consultation_type = 1 (consult de couple) get participants2 (girlfriend/boyfriend)
+        if consultation_type == 1:
+            participants2 = int(request.form['participants2'])
+            participants = [participants1, participants2]
+        elif consultation_type == 2:
+            participants2 = int(request.form['participants2'])
+            participants3 = int(request.form['participants3'])
+            participants = [participants1, participants2, participants3]
+        else:
+            participants = [participants1]
 
         data = dict(wanted_date=wanted_date, consultation_type=consultation_type, participants=participants)
 
@@ -376,7 +425,7 @@ def add_consultation():
 # Manage the consulting form actions
 @app.route('/Consulter/<int:id>', methods=['POST', 'GET'])
 @login_required
-# @register_breadcrumb(app, '.Accueil', 'Consulter')
+@register_breadcrumb(app, '.g', 'Consulter')
 def go_to_consulter(id):
     if request.method == 'POST':
 
@@ -417,7 +466,7 @@ def go_to_consulter(id):
 # Display the past/today/upcoming consultations
 @app.route('/Mes consultations/<int:sort>/<int:nav>', methods=['POST', 'GET'])
 @login_required
-@register_breadcrumb(app, '.Accueil.a', 'Mes consultations')
+@register_breadcrumb(app, '.h', 'Mes consultations')
 def go_to_view_consultations(sort, nav):
     # TODO Get consultation
 

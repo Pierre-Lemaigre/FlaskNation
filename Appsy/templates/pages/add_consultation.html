@@ -22,15 +22,15 @@
                 <div class="col-md-12 well-sm">
                     <form class="col-md-12" action="{{ url_for('go_to_add_consultation') }}" method="post">
 
-                        <div class="col-md-3 well-sm">
-                            <label>Date : </label>
+                        <div class="col-md-2 well-sm">
+                            <label>Date</label>
                             <input type="date" name="wanted_date" class="m-l"
                                     {% if data is defined and data.wanted_date is defined %}
                                    value="{{ data.wanted_date }}" {% endif %} required>
                         </div>
 
                         <div class="col-md-3 well-sm">
-                            <label>Type consultation : </label>
+                            <label>Type consultation</label>
                             <select name="consultation_type" class="m-l" id="consultation_type"
                                     onchange="displayOrNot_add_remove_patient()">
                                 <option {% if data is defined and data.consultation_type == 0 %} selected {% endif %}
@@ -45,13 +45,9 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2 col-md-offset-4">
-                            <button type="submit" class="btn btn-primary">Voir les disponibilité</button>
-                        </div>
+                        <div class="col-md-7 well-sm">
 
-                        <div class="col-md-12 well-sm">
-
-                            <label>Participant : </label>
+                            <label>Participant(s)</label>
                             <select name="participants1" class="m-l">
 
                                 <option value="-1"> -- Choisir --</option>
@@ -59,8 +55,8 @@
                                 <!-- Construct the select with the list of patient -->
                                 {% for patient in get_list_patient() %}
 
-                                    <option value="{{ patient.id }}"
-                                            {% if data is defined and data.participants == patient.id %}
+                                    <option value="{{ patient.id_pa }}"
+                                            {% if data is defined and data.participants[0] == patient.id_pa %}
                                             selected {% endif %}>
                                         {% if patient.type != "Enfant" %}
                                             {{ patient.type }} {% endif %}
@@ -78,8 +74,8 @@
                                 <!-- Construct the select with the list of patient -->
                                 {% for patient in get_list_patient() %}
 
-                                    <option value="{{ patient.id }}"
-                                            {% if data is defined and data.participants == patient.id %}
+                                    <option value="{{ patient.id_pa }}"
+                                            {% if data is defined and data.participants.lenght > 1 and data.participants[1] == patient.id_pa %}
                                             selected {% endif %}>
                                         {% if patient.type != "Enfant" %}
                                             {{ patient.type }} {% endif %}
@@ -97,8 +93,8 @@
                                 <!-- Construct the select with the list of patient -->
                                 {% for patient in get_list_patient() %}
 
-                                    <option value="{{ patient.id }}"
-                                            {% if data is defined and data.participants == patient.id %}
+                                    <option value="{{ patient.id_pa }}"
+                                            {% if data is defined and data.participants.lenght > 2 and data.participants[2] == patient.id_pa %}
                                             selected {% endif %}>
                                         {% if patient.type != "Enfant" %}
                                             {{ patient.type }} {% endif %}
@@ -109,6 +105,11 @@
 
                             </select>
 
+
+                        </div>
+
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary">Voir les disponibilité</button>
                         </div>
 
                     </form>
