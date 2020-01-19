@@ -15,6 +15,7 @@ CREATE TABLE profession(
 ------------------------------------------------------------
 CREATE TABLE patient(
 	email           VARCHAR2 (50) NOT NULL  ,
+	mot_de_passe    VARCHAR2 (88) NOT NULL  ,
 	nom             VARCHAR2 (50) NOT NULL  ,
 	prenom          VARCHAR2 (50) NOT NULL  ,
 	age             NUMBER(10,0)  NOT NULL  ,

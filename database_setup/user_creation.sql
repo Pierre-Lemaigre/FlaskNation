@@ -26,4 +26,3 @@ GRANT CREATE ANY SEQUENCE, DROP ANY SEQUENCE, SELECT ANY SEQUENCE TO psy_admin;
 -- Attributin du droit de connection et d'utilisation de l'epace de table --
 GRANT CREATE SESSION TO psy_admin;
 GRANT UNLIMITED TABLESPACE TO psy_admin;
-

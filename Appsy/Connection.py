@@ -1,5 +1,4 @@
 from passlib.hash import pbkdf2_sha256
-
 from User import User
 from VirtualDatabase import list_patient
 
