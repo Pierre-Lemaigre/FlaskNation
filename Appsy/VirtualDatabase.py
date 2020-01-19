@@ -1,7 +1,4 @@
 # Virtual BD
-next_consultation = dict(id=0, date="2019-12-27", hour="14h30", anxiety=2, payment="Carte", pice=45, type="Mr",
-                         forename="Antoine", name="Dupond")
-
 list_patient = [
     dict(id=0, type="Mr", forename="Antoine", name="Dupond", birthDate="1998-09-30", knowing=0, relationship=1,
          profession=0, username="Antoine.Dupond@gmail.com",
@@ -14,6 +11,8 @@ list_patient = [
          password="$pbkdf2-sha256$200000$J6T0Psf4nzMmxJiTklIqxQ$NBOTvTX5H3NnVwkh0ebcDZtRAdv7cRrpTc1fEOVsYaU")
 ]
 
+next_consultation = dict(id=0, date="2019-12-27", hour="14h30", anxiety=2, payment="Carte", pice=45,
+                         participants=[list_patient[0], list_patient[1]])
 list_profession = [
     dict(id=0, label="Boucher"),
     dict(id=1, label="Electricien"),
