@@ -31,7 +31,7 @@ locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
 
 # Oracle BD Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://system:Pierrot123@0.0.0.0:1521/PSYAPP'
-oracle_database = SQLAlchemy(app=app)
+database = SQLAlchemy(app=app)
 
 
 def find_patient(id):
@@ -437,4 +437,4 @@ def coming_soon():
 
 # Run the app
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
