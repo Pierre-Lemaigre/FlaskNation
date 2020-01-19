@@ -1,11 +1,14 @@
 {% extends "bootstrap/base.html" %}
 
+<!-- Define the title of the page -->
 {% block title %}
     Appsy - Connexion
 {% endblock title %}
 
+<!-- Setup the body -->
 {% block body %}
 
+    <!-- Include the shared navbar -->
     {% block navbar %}
         <nav class="navbar navbar-light bg-light">
             <a class="navbar-brand" href="#">
@@ -16,6 +19,7 @@
         </nav>
     {% endblock navbar %}
 
+    <!-- Setup the content -->
     {% block content %}
         <div class="col-md-6 col-md-offset-3 text-center">
             <h1 class="display-4 py-2 text-truncate">Connexion</h1>

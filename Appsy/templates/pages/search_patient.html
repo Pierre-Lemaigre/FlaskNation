@@ -1,14 +1,19 @@
 {% extends "bootstrap/base.html" %}
 
+<!-- Define the title of the page -->
 {% block title %}
-    Appsy - Acceuil
+    Appsy - Recherche patient
 {% endblock title %}
 
+<!-- Setup the body -->
 {% block body %}
+
+    <!-- Include the shared navbar -->
     {% block navbar %}
         {% include "layouts/shared/_nav.html" %}
     {% endblock navbar %}
 
+    <!-- Setup the content -->
     {% block content %}
 
         <div class="container m-t-xl">
@@ -29,22 +34,25 @@
 
                     <div class="col-md-12">
 
-                        {% for patient in get_list_patient() %}
-                            <a href="{{ url_for('go_to_view_update_patient', id=patient.id) }}">
-                                <div class="col-md-12 roundedborder container m-t-sm">
-                                    <h5>
-                                        {% if patient.type != "Enfant" %} {{ patient.type }} {% endif %}
-                                        {{ patient.name }} {{ patient.forename }}, né le {{ patient.birthDate }}
-                                    </h5>
-                                </div>
-                            </a>
-                        {% endfor %}
+                        {% if match_patient is defined %}
+                            {% for patient in match_patient %}
+                                <a href="{{ url_for('go_to_view_update_patient', id=patient.id) }}">
+                                    <div class="col-md-12 roundedborder container m-t-sm">
+                                        <h5>
+                                            {% if patient.type != "Enfant" %} {{ patient.type }} {% endif %}
+                                            {{ patient.name }} {{ patient.forename }}, né le {{ patient.birthDate }}
+                                        </h5>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        {% endif %}
 
                     </div>
 
                 </div>
 
             </div>
+
         </div>
 
     {% endblock content %}

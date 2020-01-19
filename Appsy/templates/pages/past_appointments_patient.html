@@ -1,14 +1,19 @@
 {% extends "bootstrap/base.html" %}
 
+<!-- Define the title of the page -->
 {% block title %}
     Appsy - Mes RDV passés
 {% endblock title %}
 
+<!-- Setup the body -->
 {% block body %}
+
+    <!-- Include the shared navbar -->
     {% block navbar %}
         {% include "layouts/shared/_nav.html" %}
     {% endblock navbar %}
 
+    <!-- Setup the content -->
     {% block content %}
 
         <div class="container">
@@ -466,10 +471,13 @@
                                  alt="Arrow up"
                                  height="15" width="60">
                         </div>
+
                     </div>
+
                 </div>
 
             </div>
+
         </div>
 
     {% endblock content %}

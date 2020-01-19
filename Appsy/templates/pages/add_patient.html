@@ -1,24 +1,31 @@
 {% extends "bootstrap/base.html" %}
 
+<!-- Define the title of the page -->
 {% block title %}
-    Appsy - Acceuil
+    Appsy - Ajout patient
 {% endblock title %}
 
+<!-- Setup the body -->
 {% block body %}
+
+    <!-- Include the shared navbar -->
     {% block navbar %}
         {% include "layouts/shared/_nav.html" %}
     {% endblock navbar %}
 
+    <!-- Setup the content -->
     {% block content %}
-
         <div class="container m-t-xl">
             <h3>Ajout d'un nouveau patient</h3>
-            <div class="col-md-12 roundedborder m-t-xs">
-                <form class="col-md-12 p-xl text-left" action="{{ url_for('go_to_add_patient') }}" method="post">
+
+            <form class="col-md-12 text-left p-n" action="{{ url_for('go_to_add_patient') }}" method="post">
+
+                <div class="col-md-12 roundedborder m-t-xs p-xl">
+
                     <div class="row-flex row col-md-12">
                         <div class="col-md-4">
                             <label class="col-md-6">Nom :</label>
-                            <input class="col-md-6" type="text" name="name">
+                            <input class="col-md-6" type="text" name="name" required>
                         </div>
 
                         <div class="col-md-4">
@@ -37,6 +44,7 @@
                                 <option value="-2">Celibataire</option>
                                 <option value="-1">Non patient</option>
 
+                                <!-- Construct the select with the list of patient -->
                                 {% for relationship in get_list_patient() %}
                                     <option value="{{ relationship.id }}">
                                         {% if relationship.type != "Enfant" %} {{ relationship.type }} {% endif %}
@@ -55,12 +63,12 @@
 
                         <div class="col-md-4">
                             <label class="col-md-6">Prénom :</label>
-                            <input class="col-md-6" type="text" name="forename">
+                            <input class="col-md-6" type="text" name="forename" required>
                         </div>
 
                         <div class="col-md-4">
                             <label class="col-md-6">Date naissance :</label>
-                            <input class="col-md-6" type="date" name="birthDate">
+                            <input class="col-md-6" type="date" name="birthDate" required>
                         </div>
 
                         <div class="col-md-4">
@@ -89,6 +97,7 @@
                                     {# TODO addNewProfession passer en params le lastInsertId de la bd #}
                                     <option value="-1" onmouseup="addNewProfession();">+ Nouveau +</option>
 
+                                    <!-- Construct the select with the list of profession -->
                                     {% for profession in get_list_profession() %}
                                         <option value="{{ profession.id }}">{{ profession.label }}</option>
                                     {% endfor %}
@@ -100,6 +109,7 @@
                                     {# TODO addNewProfession passer en params le lastInsertId de la bd #}
                                     <option value="-1" onmouseup="addNewProfession();">+ Nouveau +</option>
 
+                                    <!-- Construct the select with the list of profession -->
                                     {% for profession in get_list_profession() %}
                                         <option value="{{ profession.id }}">{{ profession.label }}</option>
                                     {% endfor %}
@@ -112,6 +122,7 @@
                                     {# TODO addNewProfession passer en params le lastInsertId de la bd #}
                                     <option value="-1" onmouseup="addNewProfession();">+ Nouveau +</option>
 
+                                    <!-- Construct the select with the list of profession -->
                                     {% for profession in get_list_profession() %}
                                         <option value="{{ profession.id }}">{{ profession.label }}</option>
                                     {% endfor %}
@@ -123,6 +134,7 @@
                                     {# TODO addNewProfession passer en params le lastInsertId de la bd #}
                                     <option value="-1" onmouseup="addNewProfession();">+ Nouveau +</option>
 
+                                    <!-- Construct the select with the list of profession -->
                                     {% for profession in get_list_profession() %}
                                         <option value="{{ profession.id }}">{{ profession.label }}</option>
                                     {% endfor %}
@@ -134,13 +146,13 @@
                                     {# TODO addNewProfession passer en params le lastInsertId de la bd #}
                                     <option value="-1" onmouseup="addNewProfession();">+ Nouveau +</option>
 
+                                    <!-- Construct the select with the list of profession -->
                                     {% for profession in get_list_profession() %}
                                         <option value="{{ profession.id }}">{{ profession.label }}</option>
                                     {% endfor %}
 
                                 </select>
                             </div>
-
 
                         </div>
 
@@ -157,13 +169,29 @@
                         <button type="submit" class="btn btn-primary col-md-2 col-md-offset-2">Valider</button>
 
                     </div>
-                </form>
 
-            </div>
+
+                </div>
+
+                <div class="col-md-12 roundedborder m-t-xs p-xl">
+
+                    <div class="col-md-6">
+                        <label class="col-md-6">Adresse mail :</label>
+                        <input class="col-md-6" type="email" name="mail" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="col-md-6">Mot de passe :</label>
+                        <input class="col-md-6" type="password" name="password" required>
+                    </div>
+
+                </div>
+
+            </form>
         </div>
-
     {% endblock content %}
 
+    <!-- Associate javascript file -->
     {% block scripts %}
         <script src="{{ url_for('static', filename='js/add_patient.js') }}"></script>
     {% endblock scripts %}
