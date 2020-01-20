@@ -1,10 +1,11 @@
 import locale
+
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_bootstrap import Bootstrap
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+
 import Connection
 from CalendarManager import *
 from VirtualDatabase import *
