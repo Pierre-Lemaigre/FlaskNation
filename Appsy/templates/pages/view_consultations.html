@@ -94,25 +94,25 @@
 
                                     <div class="col-md-12 well-sm"
                                          onmouseup="
-                                                 document.getElementById('div{{ consultation.id }}').style.display='block';
-                                                 document.getElementById('img{{ consultation.id }}').style.display='none'">
+                                                 document.getElementById('div{{ consultation[0].id }}').style.display='block';
+                                                 document.getElementById('img{{ consultation[0].id }}').style.display='none'">
 
                                         <div class="col-md-11">
                                             <h4>Rendez-vous du {{ consultation.date }}</h4>
                                         </div>
 
                                         <div class="col-md-1">
-                                            <img id="img{{ consultation.id }}"
+                                            <img id="img{{ consultation[0].id }}"
                                                  src="{{ url_for('static', filename='img/arrow_down.svg') }}"
                                                  alt="Arrow down"
                                                  height="15" width="60">
                                         </div>
                                     </div>
 
-                                    <div id="div{{ consultation.id }}" class="desc col-md-12"
+                                    <div id="div{{ consultation[0].id }}" class="desc col-md-12"
                                          onmouseup="
-                                                 document.getElementById('div{{ consultation.id }}').style.display='none';
-                                                 document.getElementById('img{{ consultation.id }}').style.display='block'">
+                                                 document.getElementById('div{{ consultation[0].id }}').style.display='none';
+                                                 document.getElementById('img{{ consultation[0].id }}').style.display='block'">
 
                                         <div class="col-md-11">
 
@@ -124,7 +124,7 @@
                                                         <p>Date :</p>
                                                     </div>
                                                     <div class="col-md-6 p-n">
-                                                        <p>{{ consultation.date }}</p>
+                                                        <p>{{ consultation[0].date }}</p>
                                                     </div>
                                                 </div>
 
@@ -134,7 +134,7 @@
                                                         <p>Indicateur d'anxiété :</p>
                                                     </div>
                                                     <div class="col-md-2 p-n">
-                                                        <p>{{ consultation.anxiety }}/10</p>
+                                                        <p>{{ consultation[0].anxiety }}/10</p>
                                                     </div>
                                                 </div>
 
@@ -144,7 +144,7 @@
                                                         <p>Mode de réglement :</p>
                                                     </div>
                                                     <div class="col-md-2 p-n">
-                                                        <p>{{ consultation.payment }}</p>
+                                                        <p>{{ consultation[0].payment }}</p>
                                                     </div>
                                                 </div>
 
@@ -154,39 +154,37 @@
                                                 <div class="col-md-3">
                                                     <p class="col-md-offset-1">Mots clé :</p>
                                                     <div class="col-md-offset-2">
-                                                        <p>- BlaBla</p>
-                                                        <p>- BlaBla</p>
-                                                        <p>- BlaBla</p>
-                                                        <p>- BlaBla</p>
+                                                        <p>{{ consultation[0].keywords }}</p>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <p class="col-md-offset-1">Comportements :</p>
                                                     <div class="col-md-offset-2">
-                                                        <p>- BlaBla</p>
-                                                        <p>- BlaBla</p>
-                                                        <p>- BlaBla</p>
-                                                        <p>- BlaBla</p>
+                                                        <p>{{ consultation[0].behaviors }}</p>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <p class="col-md-offset-1">Postures :</p>
                                                     <div class="col-md-offset-2">
-                                                        <p>- BlaBla</p>
-                                                        <p>- BlaBla</p>
-                                                        <p>- BlaBla</p>
-                                                        <p>- BlaBla</p>
+                                                        <p>{{ consultation[0].postures }}</p>
                                                     </div>
                                                 </div>
 
                                                 {#Participants#}
                                                 <div class="col-md-3">
                                                     <p class="col-md-offset-1">Participants :</p>
-                                                    <div class="col-md-offset-2">
-                                                        <p>{{ consultation.participant }}</p>
-                                                    </div>
+                                                    {% for participant in consultation[1] %}
+                                                        <div class="col-md-offset-2">
+                                                            <p>
+                                                                {% if participant.typep is defined %}
+                                                                    {{ participant.typep }}
+                                                                {% endif %}
+                                                                {{ participant.pname }} {{ participant.forname }}
+                                                            </p>
+                                                        </div>
+                                                    {% endfor %}
                                                 </div>
 
 
