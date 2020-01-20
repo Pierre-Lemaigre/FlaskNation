@@ -22,459 +22,126 @@
 
             <div>
 
-                {#An appointment#}
-                <div class="col-md-12 roundedborder p-n m-t-md">
+                {% if past_appointments is defined %}
 
-                    <div class="col-md-12 well-sm"
-                         onmouseup="
+                    {% for appointment in past_appointments %}
+
+                        {#An appointment#}
+                        <div class="col-md-12 roundedborder p-n m-t-md">
+
+                            <div class="col-md-12 well-sm"
+                                 onmouseup="
                          document.getElementById('div1').style.display='block';
                          document.getElementById('img1').style.display='none'">
 
-                        <div class="col-md-11">
-                            <h4>Rendez-vous du 24 / 10 / 2019</h4>
-                        </div>
+                                <div class="col-md-11">
+                                    <h4>Rendez-vous du {{ format_date(appointment.datec) }}</h4>
+                                </div>
 
-                        <div class="col-md-1">
-                            <img id="img1"
-                                 src="{{ url_for('static', filename='img/arrow_down.svg') }}"
-                                 alt="Arrow down"
-                                 height="15" width="60">
-                        </div>
-                    </div>
+                                <div class="col-md-1">
+                                    <img id="img1"
+                                         src="{{ url_for('static', filename='img/arrow_down.svg') }}"
+                                         alt="Arrow down"
+                                         height="15" width="60">
+                                </div>
+                            </div>
 
-                    <div id="div1" class="desc col-md-12"
-                         onmouseup="
+                            <div id="div1" class="desc col-md-12"
+                                 onmouseup="
                          document.getElementById('div1').style.display='none';
                          document.getElementById('img1').style.display='block'">
 
-                        <div class="col-md-11">
+                                <div class="col-md-11">
 
-                            <div class="row">
+                                    <div class="row">
 
-                                {#Appointment date#}
-                                <div class="col-md-3">
-                                    <div class="col-md-4 col-md-offset-1 p-n">
-                                        <p>Date :</p>
+                                        {#Appointment date#}
+                                        <div class="col-md-3">
+                                            <div class="col-md-4 col-md-offset-1 p-n">
+                                                <p>Date :</p>
+                                            </div>
+                                            <div class="col-md-6 p-n">
+                                                <p>{{ appointment.datec }}</p>
+                                            </div>
+                                        </div>
+
+                                        {#Anxiety level#}
+                                        <div class="col-md-3">
+                                            <div class="col-md-8 col-md-offset-1 p-n">
+                                                <p>Indicateur d'anxiété :</p>
+                                            </div>
+                                            <div class="col-md-2 p-n">
+                                                <p>{{ appointment.anxiety }} / 10</p>
+                                            </div>
+                                        </div>
+
+                                        {#Payment method#}
+                                        <div class="col-md-3">
+                                            <div class="col-md-8 col-md-offset-1 p-n">
+                                                <p>Mode de réglement :</p>
+                                            </div>
+                                            <div class="col-md-2 p-n">
+                                                <p>{{ appointment.payment }}</p>
+                                            </div>
+                                        </div>
+
                                     </div>
-                                    <div class="col-md-6 p-n">
-                                        <p>30 / 09 / 2019</p>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <p class="col-md-offset-1">Mots clé :</p>
+                                            <div class="col-md-offset-2">
+                                                <p>{{ appointment.keywords }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <p class="col-md-offset-1">Comportements :</p>
+                                            <div class="col-md-offset-2">
+                                                <p>{{ appointment.behaviors }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <p class="col-md-offset-1">Postures :</p>
+                                            <div class="col-md-offset-2">
+                                                <p>{{ appointment.postures }}</p>
+                                            </div>
+                                        </div>
+
+                                        {#Participants#}
+                                        <div class="col-md-3">
+                                            <p class="col-md-offset-1">Participants :</p>
+
+                                            {% for participant in appointment.participants %}
+                                                <div class="col-md-offset-2">
+                                                    <p>
+                                                        {% if participant.typep is defined %}
+                                                            {{ participant.typep }}
+                                                        {% endif %}
+                                                        {{ participant.pname }} {{ participant.forname }}
+                                                    </p>
+                                                </div>
+                                            {% endfor %}
+
+                                        </div>
+
+
                                     </div>
+
                                 </div>
 
-                                {#Anxiety level#}
-                                <div class="col-md-3">
-                                    <div class="col-md-8 col-md-offset-1 p-n">
-                                        <p>Indicateur d'anxiété :</p>
-                                    </div>
-                                    <div class="col-md-2 p-n">
-                                        <p>2 / 10</p>
-                                    </div>
+                                <div class="col-md-1">
+                                    <img src="{{ url_for('static', filename='img/arrow_up.svg') }}"
+                                         alt="Arrow up"
+                                         height="15" width="60">
                                 </div>
-
-                                {#Payment method#}
-                                <div class="col-md-3">
-                                    <div class="col-md-8 col-md-offset-1 p-n">
-                                        <p>Mode de réglement :</p>
-                                    </div>
-                                    <div class="col-md-2 p-n">
-                                        <p>Carte</p>
-                                    </div>
-                                </div>
-
                             </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Mots clé :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Comportements :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Postures :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                {#Participants#}
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Participants :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>Mr. Nom Prénom</p>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
                         </div>
 
-                        <div class="col-md-1">
-                            <img src="{{ url_for('static', filename='img/arrow_up.svg') }}"
-                                 alt="Arrow up"
-                                 height="15" width="60">
-                        </div>
-                    </div>
-                </div>
+                    {% endfor %}
 
-                {#An appointment#}
-                <div class="col-md-12 roundedborder p-n m-t-md">
-
-                    <div class="col-md-12 well-sm"
-                         onmouseup="
-                         document.getElementById('div2').style.display='block';
-                         document.getElementById('img2').style.display='none'">
-
-                        <div class="col-md-11">
-                            <h4>Rendez-vous du 24 / 10 / 2019</h4>
-                        </div>
-
-                        <div class="col-md-1">
-                            <img id="img2"
-                                 src="{{ url_for('static', filename='img/arrow_down.svg') }}"
-                                 alt="Arrow down"
-                                 height="15" width="60">
-                        </div>
-                    </div>
-
-                    <div id="div2" class="desc col-md-12"
-                         onmouseup="
-                         document.getElementById('div2').style.display='none';
-                         document.getElementById('img2').style.display='block'">
-
-                        <div class="col-md-11">
-
-                            <div class="row">
-
-                                {#Appointment date#}
-                                <div class="col-md-3">
-                                    <div class="col-md-4 col-md-offset-1 p-n">
-                                        <p>Date :</p>
-                                    </div>
-                                    <div class="col-md-6 p-n">
-                                        <p>30 / 09 / 2019</p>
-                                    </div>
-                                </div>
-
-                                {#Anxiety level#}
-                                <div class="col-md-3">
-                                    <div class="col-md-8 col-md-offset-1 p-n">
-                                        <p>Indicateur d'anxiété :</p>
-                                    </div>
-                                    <div class="col-md-2 p-n">
-                                        <p>2 / 10</p>
-                                    </div>
-                                </div>
-
-                                {#Payment method#}
-                                <div class="col-md-3">
-                                    <div class="col-md-8 col-md-offset-1 p-n">
-                                        <p>Mode de réglement :</p>
-                                    </div>
-                                    <div class="col-md-2 p-n">
-                                        <p>Carte</p>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Mots clé :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Comportements :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Postures :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                {#Participants#}
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Participants :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>Mr. Nom Prénom</p>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-1">
-                            <img src="{{ url_for('static', filename='img/arrow_up.svg') }}"
-                                 alt="Arrow up"
-                                 height="15" width="60">
-                        </div>
-                    </div>
-                </div>
-
-                {#An appointment#}
-                <div class="col-md-12 roundedborder p-n m-t-md">
-
-                    <div class="col-md-12 well-sm"
-                         onmouseup="
-                         document.getElementById('div3').style.display='block';
-                         document.getElementById('img3').style.display='none'">
-
-                        <div class="col-md-11">
-                            <h4>Rendez-vous du 24 / 10 / 2019</h4>
-                        </div>
-
-                        <div class="col-md-1">
-                            <img id="img3"
-                                 src="{{ url_for('static', filename='img/arrow_down.svg') }}"
-                                 alt="Arrow down"
-                                 height="15" width="60">
-                        </div>
-                    </div>
-
-                    <div id="div3" class="desc col-md-12"
-                         onmouseup="
-                         document.getElementById('div3').style.display='none';
-                         document.getElementById('img3').style.display='block'">
-
-                        <div class="col-md-11">
-
-                            <div class="row">
-
-                                {#Appointment date#}
-                                <div class="col-md-3">
-                                    <div class="col-md-4 col-md-offset-1 p-n">
-                                        <p>Date :</p>
-                                    </div>
-                                    <div class="col-md-6 p-n">
-                                        <p>30 / 09 / 2019</p>
-                                    </div>
-                                </div>
-
-                                {#Anxiety level#}
-                                <div class="col-md-3">
-                                    <div class="col-md-8 col-md-offset-1 p-n">
-                                        <p>Indicateur d'anxiété :</p>
-                                    </div>
-                                    <div class="col-md-2 p-n">
-                                        <p>2 / 10</p>
-                                    </div>
-                                </div>
-
-                                {#Payment method#}
-                                <div class="col-md-3">
-                                    <div class="col-md-8 col-md-offset-1 p-n">
-                                        <p>Mode de réglement :</p>
-                                    </div>
-                                    <div class="col-md-2 p-n">
-                                        <p>Carte</p>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Mots clé :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Comportements :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Postures :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                {#Participants#}
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Participants :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>Mr. Nom Prénom</p>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-1">
-                            <img src="{{ url_for('static', filename='img/arrow_up.svg') }}"
-                                 alt="Arrow up"
-                                 height="15" width="60">
-                        </div>
-                    </div>
-                </div>
-
-                {#An appointment#}
-                <div class="col-md-12 roundedborder p-n m-t-md">
-
-                    <div class="col-md-12 well-sm"
-                         onmouseup="
-                         document.getElementById('div4').style.display='block';
-                         document.getElementById('img4').style.display='none'">
-
-                        <div class="col-md-11">
-                            <h4>Rendez-vous du 24 / 10 / 2019</h4>
-                        </div>
-
-                        <div class="col-md-1">
-                            <img id="img4"
-                                 src="{{ url_for('static', filename='img/arrow_down.svg') }}"
-                                 alt="Arrow down"
-                                 height="15" width="60">
-                        </div>
-                    </div>
-
-                    <div id="div4" class="desc col-md-12"
-                         onmouseup="
-                         document.getElementById('div4').style.display='none';
-                         document.getElementById('img4').style.display='block'">
-
-                        <div class="col-md-11">
-
-                            <div class="row">
-
-                                {#Appointment date#}
-                                <div class="col-md-3">
-                                    <div class="col-md-4 col-md-offset-1 p-n">
-                                        <p>Date :</p>
-                                    </div>
-                                    <div class="col-md-6 p-n">
-                                        <p>30 / 09 / 2019</p>
-                                    </div>
-                                </div>
-
-                                {#Anxiety level#}
-                                <div class="col-md-3">
-                                    <div class="col-md-8 col-md-offset-1 p-n">
-                                        <p>Indicateur d'anxiété :</p>
-                                    </div>
-                                    <div class="col-md-2 p-n">
-                                        <p>2 / 10</p>
-                                    </div>
-                                </div>
-
-                                {#Payment method#}
-                                <div class="col-md-3">
-                                    <div class="col-md-8 col-md-offset-1 p-n">
-                                        <p>Mode de réglement :</p>
-                                    </div>
-                                    <div class="col-md-2 p-n">
-                                        <p>Carte</p>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Mots clé :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Comportements :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Postures :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                        <p>- BlaBla</p>
-                                    </div>
-                                </div>
-
-                                {#Participants#}
-                                <div class="col-md-3">
-                                    <p class="col-md-offset-1">Participants :</p>
-                                    <div class="col-md-offset-2">
-                                        <p>Mr. Nom Prénom</p>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-1">
-                            <img src="{{ url_for('static', filename='img/arrow_up.svg') }}"
-                                 alt="Arrow up"
-                                 height="15" width="60">
-                        </div>
-
-                    </div>
-
-                </div>
+                {% endif %}
 
             </div>
 
