@@ -54,9 +54,9 @@ class Patient(database.Model):
     typep = database.Column(database.String(10), nullable=False)
     relationship = database.Column(database.Integer, nullable=False)
     historique_profession = database.relationship('Profession', secondary=ont_exerce,
-                                                  backref=database.backref('a_exerce', lazy='dynamic'))
+                                                  backref=database.backref('ont_exerce', lazy='dynamic'))
     historique_seance = database.relationship('Consultation', secondary=seances,
-                                              backref=database.backref('seance', lazy='dynamic'))
+                                              backref=database.backref('seances', lazy='dynamic'))
 
 
 class Profession(database.Model):
@@ -94,7 +94,7 @@ class Consultation(database.Model):
     id_creneau_horaire = database.Column(database.Integer, database.ForeignKey('creneau_horaire.id_creneau_horaire'),
                                          nullable=False)
     participants = database.relationship('Patient', secondary=seances,
-                                          backref=database.backref('seance', lazy='dynamic'))
+                                          backref=database.backref('seances', lazy='dynamic'))
 
 
 # Render template + Ensure responses aren't cached
@@ -217,7 +217,7 @@ def go_to_connection():
 @register_breadcrumb(app, '.', 'Accueil')
 def go_to_home():
     # If connect as Psy
-    if current_user.username == "admin":
+    if current_user.username.upper() == "admin.admin@gmail.com".upper():
         return custom_render_template(render_template('pages/home_psy.html', next_consultation=next_consultation))
 
     # If connect as patient
@@ -230,8 +230,8 @@ def go_to_home():
 @login_required
 @register_breadcrumb(app, '.a', 'Rendez-vous passes')
 def go_to_past_appointments():
-    # TODO Get past appointments
-    appointments = Consultation.query.filter(Consultation.datec < calendar_manager.get_today())
+    appointments = Consultation.query.filter(Consultation.datec < calendar_manager.get_today()).filter(Consultation.seances.any(id_pa=current_user.id))
+    
     past_appointments = []
     for appointment in appointments:
         past_appointments.append([appointment, appointment.participants])
@@ -245,11 +245,12 @@ def go_to_past_appointments():
 @login_required
 @register_breadcrumb(app, '.b', 'Rendez-vous futurs')
 def go_to_upcoming_appointments():
-    # TODO Get upcoming appointments
-    upcoming_appointments = None
+    appointments = Consultation.query.filter(Consultation.datec >= calendar_manager.get_today()).filter(Consultation.seances.any(id_pa=current_user.id))
+    
+    upcoming_appointments = []
+    for appointment in appointments:
+        upcoming_appointments.append([appointment, appointment.participants])
 
-    # TODO Get participants and add to upcoming_appointments
-    upcoming_appointments.participants = None
 
     return custom_render_template(
         render_template('pages/upcoming_appointments_patient.html', upcoming_appointments=upcoming_appointments))

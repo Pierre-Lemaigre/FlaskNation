@@ -35,7 +35,7 @@
                          document.getElementById('img1').style.display='none'">
 
                                 <div class="col-md-11">
-                                    <h4>Rendez-vous du {{ format_date(appointment.datec) }}</h4>
+                                    <h4>Rendez-vous du {{ appointment[0].datec }}</h4>
                                 </div>
 
                                 <div class="col-md-1">
@@ -61,7 +61,7 @@
                                                 <p>Date :</p>
                                             </div>
                                             <div class="col-md-6 p-n">
-                                                <p>{{ appointment.datec }}</p>
+                                                <p>{{ appointment[0].datec }}</p>
                                             </div>
                                         </div>
 
@@ -113,7 +113,7 @@
                                         <div class="col-md-3">
                                             <p class="col-md-offset-1">Participants :</p>
 
-                                            {% for participant in appointment.participants %}
+                                            {% for participant in appointment[1] %}
                                                 <div class="col-md-offset-2">
                                                     <p>
                                                         {% if participant.typep is defined %}

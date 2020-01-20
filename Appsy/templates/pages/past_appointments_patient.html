@@ -31,25 +31,25 @@
 
                             <div class="col-md-12 well-sm"
                                  onmouseup="
-                         document.getElementById('div1').style.display='block';
-                         document.getElementById('img1').style.display='none'">
+                         document.getElementById('div{{ loop.index }}').style.display='block';
+                         document.getElementById('img{{ loop.index }}').style.display='none'">
 
                                 <div class="col-md-11">
-                                    <h4>Rendez-vous du {{ appointment.datec }}</h4>
+                                    <h4>Rendez-vous du {{ appointment[0].datec }}</h4>
                                 </div>
 
                                 <div class="col-md-1">
-                                    <img id="img1"
+                                    <img id="img{{ loop_index }}"
                                          src="{{ url_for('static', filename='img/arrow_down.svg') }}"
                                          alt="Arrow down"
                                          height="15" width="60">
                                 </div>
                             </div>
 
-                            <div id="div1" class="desc col-md-12"
+                            <div id="div{{ loop.index }}" class="desc col-md-12"
                                  onmouseup="
-                         document.getElementById('div1').style.display='none';
-                         document.getElementById('img1').style.display='block'">
+                         document.getElementById('div{{ loop.index }}').style.display='none';
+                         document.getElementById('img{{ loop.index }}').style.display='block'">
 
                                 <div class="col-md-11">
 
@@ -61,7 +61,7 @@
                                                 <p>Date :</p>
                                             </div>
                                             <div class="col-md-6 p-n">
-                                                <p>{{ appointment.datec }}</p>
+                                                <p>{{ appointment[0].datec }}</p>
                                             </div>
                                         </div>
 
@@ -71,7 +71,7 @@
                                                 <p>Indicateur d'anxiété :</p>
                                             </div>
                                             <div class="col-md-2 p-n">
-                                                <p>{{ appointment.anxiety }} / 10</p>
+                                                <p>{{ appointment[0].anxiety }} / 10</p>
                                             </div>
                                         </div>
 
@@ -81,7 +81,7 @@
                                                 <p>Mode de réglement :</p>
                                             </div>
                                             <div class="col-md-2 p-n">
-                                                <p>{{ appointment.payment }}</p>
+                                                <p>{{ appointment[0].payment }}</p>
                                             </div>
                                         </div>
 
@@ -91,21 +91,21 @@
                                         <div class="col-md-3">
                                             <p class="col-md-offset-1">Mots clé :</p>
                                             <div class="col-md-offset-2">
-                                                <p>{{ appointment.keywords }}</p>
+                                                <p>{{ appointment[0].keywords }}</p>
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <p class="col-md-offset-1">Comportements :</p>
                                             <div class="col-md-offset-2">
-                                                <p>{{ appointment.behaviors }}</p>
+                                                <p>{{ appointment[0].behaviors }}</p>
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <p class="col-md-offset-1">Postures :</p>
                                             <div class="col-md-offset-2">
-                                                <p>{{ appointment.postures }}</p>
+                                                <p>{{ appointment[0].postures }}</p>
                                             </div>
                                         </div>
 
@@ -113,7 +113,7 @@
                                         <div class="col-md-3">
                                             <p class="col-md-offset-1">Participants :</p>
 
-                                            {% for participant in appointment.participants %}
+                                            {% for participant in appointment[1] %}
                                                 <div class="col-md-offset-2">
                                                     <p>
                                                         {% if participant.typep is defined %}
@@ -149,4 +149,4 @@
 
     {% endblock content %}
 
-{% endblock body %}
+{% endblock body %}"

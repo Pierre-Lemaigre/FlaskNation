@@ -66,7 +66,7 @@ CREATE TABLE a_exerce(
 ------------------------------------------------------------
 CREATE TABLE Seance(
 	id_co          NUMBER(10,0)  NOT NULL  ,
-	id_pa  NUMBER(10,0)  NOT NULL  ,
+	id_pa  		   NUMBER(10,0)  NOT NULL  ,
 	CONSTRAINT PK_Seance PRIMARY KEY (id_co,id_pa)
 	,CONSTRAINT FK_Seance_consultation FOREIGN KEY (id_co) REFERENCES consultation(id_co)
 	,CONSTRAINT FK_Seance_patient0 FOREIGN KEY (id_pa) REFERENCES patient(id_pa)
