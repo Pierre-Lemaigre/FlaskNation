@@ -30,8 +30,8 @@ calendar_manager = CalendarManager()
 locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
 
 # Oracle BD Configuration
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://system:Pierrot123@0.0.0.0:1521/app'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://system:Pierrot123@0.0.0.0:1521/app'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 database = SQLAlchemy(app=app)
 
 
@@ -53,7 +53,7 @@ class Patient(database.Model):
     forname = database.Column(database.String(20), nullable=False)
     birthdate = database.Column(database.DateTime, default=datetime.utcnow, nullable=False)
     knowing = database.Column(database.Integer, nullable=False)
-    typep = database.Column(database.Integer, nullable=False)
+    typep = database.Column(database.String(10), nullable=False)
     relationship = database.Column(database.Integer, nullable=False)
     historique_profession = database.relationship('Profession', secondary=ont_exerce,
                                                   backref=database.backref('a_exerce', lazy='dynamic'))
@@ -175,7 +175,8 @@ def utility_processor():
 @app.context_processor
 def utility_processor():
     def get_data_current_user():
-        return Patient.query.get(current_user.id)
+        patient = Patient.query.get(current_user.id)
+        return patient
     return dict(get_data_current_user=get_data_current_user)
 
 
@@ -307,14 +308,7 @@ def go_to_view_update_patient(id):
         typep = request.form['type']
         knowing = request.form['knowing']
         relationship = request.form['relationship']
-        profession1 = request.form['profession1']
-        profession2 = request.form['profession2']
-        profession3 = request.form['profession3']
-        profession4 = request.form['profession4']
-        profession5 = request.form['profession5']
-        
-        professions = Profession.query.filter_by(id_pa=id)
-        
+
         patient = Patient.query.get(id)
         patient.typep = typep
         patient.knowing = knowing
@@ -323,10 +317,7 @@ def go_to_view_update_patient(id):
         if (password is not ""):
             cpassword = Connection.crypt_password(password)
             patient.password = cpassword
-        for prof in professions:
-            if(prof != -1):
-                prof.id_pr = prof
-                database.session.commit()
+
         # if password is not "":
         # Todo change password
 
@@ -334,8 +325,8 @@ def go_to_view_update_patient(id):
 
     # Display the specified patient
     else:
-        return render_template('pages/view_update_patient.html')
-        # TODO Find patient by id)
+        patient = Patient.query.get(id)
+        return render_template('pages/view_update_patient.html', patient=patient)
 
 
 # Delete a patient
@@ -516,6 +507,8 @@ def unauthorized():
 @app.route('/coming_soon')
 def coming_soon():
     return custom_render_template(render_template('pages/coming_soon.html'))
+
+
 
 
 # Run the app

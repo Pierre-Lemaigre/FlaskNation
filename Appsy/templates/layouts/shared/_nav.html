@@ -13,7 +13,7 @@
             <ul class="nav navbar-nav navbar-right well-sm">
 
                 <!-- Display current user forename and lastname -->
-                <li>Bienvenue {{ get_data_current_user().forename }} {{ get_data_current_user().name }} !
+                <li>Bienvenue {{ get_data_current_user().forname }} {{ get_data_current_user().pname }} !
                     <a href="{{ url_for('logout') }}">
                         <button type="button" class="btn btn-primary">Deconnexion</button>
                     </a>
