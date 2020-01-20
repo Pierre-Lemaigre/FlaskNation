@@ -1,10 +1,9 @@
 import locale
-
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_bootstrap import Bootstrap
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from flask_sqlalchemy import SQLAlchemy, Model
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import Connection
 from CalendarManager import *
@@ -34,10 +33,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://system:Pierrot123@0.0.0.0:1521
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 database = SQLAlchemy(app=app)
 
-
 ont_exerce = database.Table('ont_exerce',
-                          database.Column('id_pr', database.ForeignKey('profession.id_pr'), primary_key=True),
-                          database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
+                            database.Column('id_pr', database.ForeignKey('profession.id_pr'), primary_key=True),
+                            database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
 
 seances = database.Table('seances',
                          database.Column('id_co', database.ForeignKey('consultation.id_co'), primary_key=True),
@@ -79,7 +77,7 @@ class Creneau_horaire(database.Model):
     def __repr__(self):
         return "<Creneau_horaire(date_debut_creneau='%s',\
             date_fin_creneau='%s',)>" % \
-            (self.h_debut, self.h_fin)
+               (self.h_debut, self.h_fin)
 
 
 class Consultation(database.Model):
@@ -93,7 +91,8 @@ class Consultation(database.Model):
     keywords = database.Column(database.String(255), nullable=False)
     behaviors = database.Column(database.String(255), nullable=False)
     postures = database.Column(database.String(255), nullable=False)
-    id_creneau_horaire = database.Column(database.Integer, database.ForeignKey('creneau_horaire.id_creneau_horaire'), nullable=False)
+    id_creneau_horaire = database.Column(database.Integer, database.ForeignKey('creneau_horaire.id_creneau_horaire'),
+                                         nullable=False)
 
 
 # Render template + Ensure responses aren't cached
@@ -175,8 +174,8 @@ def utility_processor():
 @app.context_processor
 def utility_processor():
     def get_data_current_user():
-        patient = Patient.query.get(current_user.id)
-        return patient
+        return Patient.query.get(current_user.id)
+
     return dict(get_data_current_user=get_data_current_user)
 
 
@@ -229,7 +228,14 @@ def go_to_home():
 @login_required
 @register_breadcrumb(app, '.a', 'Rendez-vous passes')
 def go_to_past_appointments():
-    return custom_render_template(render_template('pages/past_appointments_patient.html'))
+    # TODO Get past appointments
+    past_appointments = None
+
+    # TODO Get participants and add to past_appointments
+    past_appointments.participants = None
+
+    return custom_render_template(
+        render_template('pages/past_appointments_patient.html', past_appointments=past_appointments))
 
 
 # Display upcoming appointments (for patient)
@@ -237,7 +243,14 @@ def go_to_past_appointments():
 @login_required
 @register_breadcrumb(app, '.b', 'Rendez-vous futurs')
 def go_to_upcoming_appointments():
-    return custom_render_template(render_template('pages/upcoming_appointments_patient.html'))
+    # TODO Get upcoming appointments
+    upcoming_appointments = None
+
+    # TODO Get participants and add to upcoming_appointments
+    upcoming_appointments.participants = None
+
+    return custom_render_template(
+        render_template('pages/upcoming_appointments_patient.html', upcoming_appointments=upcoming_appointments))
 
 
 # Manage the adding of a new patient
@@ -263,12 +276,13 @@ def go_to_add_patient():
         professions = [profession1, profession2, profession3, profession3, profession4, profession5]
 
         cpassword = Connection.crypt_password(password)
-        patient = Patient(username=username, password=cpassword, pname=pname, forename=forename, birthDate=birthDate, knowing=knowing, typep=typep, relationship=relationship)
+        patient = Patient(username=username, password=cpassword, pname=pname, forename=forename, birthDate=birthDate,
+                          knowing=knowing, typep=typep, relationship=relationship)
         database.session.add(patient)
         database.session.commit()
         patient = Patient.query.filter_by(username=username).first()
         for prof in professions:
-            if(prof != -1):
+            if (prof != -1):
                 profbd = database.query.get(prof)
                 profbd.a_exerce.append(patient)
                 database.session.commit()
@@ -317,9 +331,7 @@ def go_to_view_update_patient(id):
         if (password is not ""):
             cpassword = Connection.crypt_password(password)
             patient.password = cpassword
-
-        # if password is not "":
-        # Todo change password
+        database.session.commit()
 
         return redirect(url_for('go_to_home'))
 
