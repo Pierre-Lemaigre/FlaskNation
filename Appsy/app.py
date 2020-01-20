@@ -37,7 +37,7 @@ ont_exerce = database.Table('ont_exerce',
                             database.Column('id_pr', database.ForeignKey('profession.id_pr'), primary_key=True),
                             database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
 
-seances = database.Table('seances',
+seances = database.Table('seance',
                          database.Column('id_co', database.ForeignKey('consultation.id_co'), primary_key=True),
                          database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
 
@@ -56,7 +56,7 @@ class Patient(database.Model):
     historique_profession = database.relationship('Profession', secondary=ont_exerce,
                                                   backref=database.backref('a_exerce', lazy='dynamic'))
     historique_seance = database.relationship('Consultation', secondary=seances,
-                                              backref=database.backref('seances', lazy='dynamic'))
+                                              backref=database.backref('seance', lazy='dynamic'))
 
 
 class Profession(database.Model):
@@ -93,6 +93,8 @@ class Consultation(database.Model):
     postures = database.Column(database.String(255), nullable=False)
     id_creneau_horaire = database.Column(database.Integer, database.ForeignKey('creneau_horaire.id_creneau_horaire'),
                                          nullable=False)
+    participants = database.relationship('Patient', secondary=seances,
+                                          backref=database.backref('seance', lazy='dynamic'))
 
 
 # Render template + Ensure responses aren't cached
@@ -229,10 +231,10 @@ def go_to_home():
 @register_breadcrumb(app, '.a', 'Rendez-vous passes')
 def go_to_past_appointments():
     # TODO Get past appointments
-    past_appointments = None
-
-    # TODO Get participants and add to past_appointments
-    past_appointments.participants = None
+    appointments = Consultation.query.filter(Consultation.datec < calendar_manager.get_today())
+    past_appointments = []
+    for appointment in appointments:
+        past_appointments.append([appointment, appointment.participants])
 
     return custom_render_template(
         render_template('pages/past_appointments_patient.html', past_appointments=past_appointments))
