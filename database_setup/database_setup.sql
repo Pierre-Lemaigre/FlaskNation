@@ -13,6 +13,7 @@ CREATE TABLE patient(
 	forname       VARCHAR2 (20) NOT NULL  ,
 	birthDate     DATE  NOT NULL  ,
 	knowing       NUMBER(10,0)  NOT NULL  ,
+	typep		  VARCHAR2 (19)	NOT NULL,
 	relationship  NUMBER(10,0),
 	CONSTRAINT PK_patient PRIMARY KEY (id_pa)
 );

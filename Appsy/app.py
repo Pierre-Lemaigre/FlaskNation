@@ -4,13 +4,8 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 from flask_bootstrap import Bootstrap
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-<<<<<<< HEAD
 from flask_sqlalchemy import SQLAlchemy, Model
 from datetime import datetime
-=======
-from flask_sqlalchemy import SQLAlchemy
-
->>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 import Connection
 from CalendarManager import *
 from VirtualDatabase import *
@@ -39,27 +34,14 @@ locale.setlocale(locale.LC_ALL, 'fr_FR.utf8')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 database = SQLAlchemy(app=app)
 
-<<<<<<< HEAD
 
 ont_exerce = database.Table('ont_exerce',
                           database.Column('id_pr', database.ForeignKey('profession.id_pr'), primary_key=True),
                           database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
-=======
-a_exerce = database.Table('historique_profession',
-                          database.Column('id_profession', database.ForeignKey('profession.id_profession'),
-                                          primary_key=True),
-                          database.Column('email', database.ForeignKey('patient.email'), primary_key=True))
->>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 seances = database.Table('seances',
-<<<<<<< HEAD
                          database.Column('id_co', database.ForeignKey('consultation.id_co'), primary_key=True),
                          database.Column('id_pa', database.ForeignKey('patient.id_pa'), primary_key=True))
-=======
-                         database.Column('id_consultation', database.ForeignKey('consultation.id_consultation'),
-                                         primary_key=True),
-                         database.Column('email', database.ForeignKey('patient.email'), primary_key=True))
->>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 
 class Patient(database.Model):
@@ -71,21 +53,12 @@ class Patient(database.Model):
     forname = database.Column(database.String(20), nullable=False)
     birthdate = database.Column(database.DateTime, default=datetime.utcnow, nullable=False)
     knowing = database.Column(database.Integer, nullable=False)
+    typep = database.Column(database.Integer, nullable=False)
     relationship = database.Column(database.Integer, nullable=False)
     historique_profession = database.relationship('Profession', secondary=ont_exerce,
                                                   backref=database.backref('a_exerce', lazy='dynamic'))
     historique_seance = database.relationship('Consultation', secondary=seances,
-<<<<<<< HEAD
                                               backref=database.backref('seances', lazy='dynamic'))
-=======
-                                              backref=database.backref('Seance', lazy='dynamic'))
-
-    def __repr__(self):
-        return "<Patient(email='%s', nom='%s', prenom='%s', age='%d', \
-                    adresse='%s', connaissance='%s', classification='%s')>" \
-               % (self.email, self.nom, self.prenom, self.age,
-                  self.adresse, self.connaissance, self.classification)
->>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 
 class Profession(database.Model):
@@ -104,21 +77,13 @@ class Creneau_horaire(database.Model):
     h_fin = database.Column(database.String(10), nullable=False)
 
     def __repr__(self):
-<<<<<<< HEAD
         return "<Creneau_horaire(date_debut_creneau='%s',\
             date_fin_creneau='%s',)>" % \
             (self.h_debut, self.h_fin)
-=======
-        return "<Creneau_horaire(date_debut_creneau='%d',\
-            date_fin_creneau='%d', jour_de_la_semaine='%s')>" % \
-               (self.date_debut_creneau, self.date_fin_creneau,
-                self.jour_de_la_semaine)
->>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 
 class Consultation(database.Model):
     __tablename__ = 'consultation'
-<<<<<<< HEAD
     id_co = database.Column(database.Integer, primary_key=True)
     datec = database.Column(database.DateTime, default=datetime.utcnow, nullable=False)
     anxiety = database.Column(database.Integer, nullable=False)
@@ -129,16 +94,6 @@ class Consultation(database.Model):
     behaviors = database.Column(database.String(255), nullable=False)
     postures = database.Column(database.String(255), nullable=False)
     id_creneau_horaire = database.Column(database.Integer, database.ForeignKey('creneau_horaire.id_creneau_horaire'), nullable=False)
-=======
-    id_consultation = database.Column(database.Integer, primary_key=True)
-    date_consultation = database.Column(database.DateTime, default=datetime.utcnow, nullable=False)
-    comportement = database.Column(database.String(20), nullable=False)
-    remarque = database.Column(database.String(200), nullable=False)
-    anxiete = database.Column(database.Integer, nullable=False)
-    posture = database.Column(database.String(20), nullable=False)
-    id_creneau_horaire = database.Column(database.Integer, database.ForeignKey('creneau_horaire.id_creneau_horaire'),
-                                         nullable=False)
->>>>>>> 330787c76bf144f5bf7f8fffab2ab0277bd83bed
 
 
 # Render template + Ensure responses aren't cached
@@ -291,10 +246,10 @@ def go_to_upcoming_appointments():
 def go_to_add_patient():
     # Save the new patient
     if request.method == 'POST':
-
-        # TODO Add patient
-        name = request.form['name']
-        type = request.form['type']
+        username = request.form['mail']
+        password = request.form['password']
+        pname = request.form['name']
+        typep = request.form['type']
         relationship = request.form['relationship']
         forename = request.form['forename']
         birthDate = request.form['birthDate']
@@ -304,9 +259,18 @@ def go_to_add_patient():
         profession3 = request.form['profession3']
         profession4 = request.form['profession4']
         profession5 = request.form['profession5']
-        mail = request.form['mail']
-        password = request.form['password']
+        professions = [profession1, profession2, profession3, profession3, profession4, profession5]
 
+        cpassword = Connection.crypt_password(password)
+        patient = Patient(username=username, password=cpassword, pname=pname, forename=forename, birthDate=birthDate, knowing=knowing, typep=typep, relationship=relationship)
+        database.session.add(patient)
+        database.session.commit()
+        patient = Patient.query.filter_by(username=username).first()
+        for prof in professions:
+            if(prof != -1):
+                profbd = database.query.get(prof)
+                profbd.a_exerce.append(patient)
+                database.session.commit()
         return redirect(url_for('go_to_home'))
 
     # Display adding patient page
@@ -322,10 +286,8 @@ def go_to_add_patient():
 def go_to_search_patient():
     # If a search as been made
     if request.method == 'POST':
-
-        # TODO Search
         search = request.form['search']
-
+        list_patient = Patient.query.filter(Patient.pname.like(search))
         return custom_render_template(
             render_template('pages/search_patient.html', match_patient=list_patient))
 
@@ -340,19 +302,31 @@ def go_to_search_patient():
 def go_to_view_update_patient(id):
     # Update the patient's data
     if request.method == 'POST':
-
-        # TODO Update
-        type = request.form['type']
-        relationship = request.form['relationship']
+        mail = request.form['mail']
+        password = request.form['password']
+        typep = request.form['type']
         knowing = request.form['knowing']
+        relationship = request.form['relationship']
         profession1 = request.form['profession1']
         profession2 = request.form['profession2']
         profession3 = request.form['profession3']
         profession4 = request.form['profession4']
         profession5 = request.form['profession5']
-        mail = request.form['mail']
-        password = request.form['password']
-
+        
+        professions = Profession.query.filter_by(id_pa=id)
+        
+        patient = Patient.query.get(id)
+        patient.typep = typep
+        patient.knowing = knowing
+        patient.mail = mail
+        patient.relationship = relationship
+        if (password is not ""):
+            cpassword = Connection.crypt_password(password)
+            patient.password = cpassword
+        for prof in professions:
+            if(prof != -1):
+                prof.id_pr = prof
+                database.session.commit()
         # if password is not "":
         # Todo change password
 
